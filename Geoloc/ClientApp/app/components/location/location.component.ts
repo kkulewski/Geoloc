@@ -5,20 +5,24 @@ import { Component } from '@angular/core';
     templateUrl: './location.component.html'
 })
 export class LocationComponent {
-    public latitude = 0;
-    public longitude = 0;
+    public location = new Location(0, 0);
 
     public locate() {
         navigator.geolocation.getCurrentPosition((pos) => this.setLocationSuccess(pos), this.setLocationFail, { timeout: 10000 });
     }
 
     public setLocationSuccess(position: Position) {
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
+        this.location = new Location(position.coords.latitude, position.coords.longitude);
     }
 
     public setLocationFail() {
-        this.latitude = -1;
-        this.longitude = -1;
+        this.location = new Location(-1, -1);
+    }
+}
+
+export class Location {
+    constructor(public latitude: number, public longitude: number) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }
