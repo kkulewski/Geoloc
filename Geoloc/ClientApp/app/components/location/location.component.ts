@@ -5,18 +5,30 @@ import { Component } from '@angular/core';
     templateUrl: './location.component.html'
 })
 export class LocationComponent {
-    public location = new Location(0, 0);
+    public location?: Location;
+    public locationAvailable: boolean;
 
     public locate() {
-        navigator.geolocation.getCurrentPosition((pos) => this.setLocationSuccess(pos), this.setLocationFail, { timeout: 10000 });
+        if (!navigator.geolocation) {
+            this.locationAvailable = false;
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => this.setLocationSuccess(pos),
+            this.setLocationFail,
+            { timeout: 10000 }
+        );
     }
 
     public setLocationSuccess(position: Position) {
+        this.locationAvailable = true;
         this.location = new Location(position.coords.latitude, position.coords.longitude);
     }
 
     public setLocationFail() {
-        this.location = new Location(-1, -1);
+        this.locationAvailable = false;
+        this.location = undefined;
     }
 }
 
