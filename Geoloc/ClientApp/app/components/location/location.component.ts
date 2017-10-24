@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { Http } from "@angular/http";
+
 
 @Component({
     selector: 'location',
@@ -7,6 +9,12 @@ import { Component } from '@angular/core';
 export class LocationComponent {
     public location?: Location;
     public locationAvailable: boolean;
+
+    constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) { }
+
+    public sendLocation() {
+        this.http.post(this.baseUrl + 'api/Location/Send', this.location);
+    }
 
     public locate() {
         if (!navigator.geolocation) {
@@ -24,6 +32,7 @@ export class LocationComponent {
     private onLocateSuccess(position: Position) {
         this.locationAvailable = true;
         this.location = new Location(position.coords.latitude, position.coords.longitude);
+        this.sendLocation();
     }
 
     private onLocateFailure() {
