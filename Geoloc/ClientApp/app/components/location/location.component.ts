@@ -15,18 +15,18 @@ export class LocationComponent {
         }
 
         navigator.geolocation.getCurrentPosition(
-            (pos) => this.setLocationSuccess(pos),
-            this.setLocationFail,
+            (pos) => this.onLocateSuccess(pos),
+            this.onLocateFailure,
             { timeout: 10000 }
         );
     }
 
-    public setLocationSuccess(position: Position) {
+    private onLocateSuccess(position: Position) {
         this.locationAvailable = true;
         this.location = new Location(position.coords.latitude, position.coords.longitude);
     }
 
-    public setLocationFail() {
+    private onLocateFailure() {
         this.locationAvailable = false;
         this.location = undefined;
     }
