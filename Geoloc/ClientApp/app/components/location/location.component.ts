@@ -13,7 +13,7 @@ export class LocationComponent {
     constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) { }
 
     public sendLocation() {
-        this.http.post(this.baseUrl + 'api/Location/Send', this.location);
+        this.http.post(this.baseUrl + 'api/Location/Send', this.location).subscribe(error => console.error(error));
     }
 
     public locate() {
