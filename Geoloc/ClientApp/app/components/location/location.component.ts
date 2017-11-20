@@ -7,7 +7,7 @@ import { Http } from "@angular/http";
     templateUrl: './location.component.html'
 })
 export class LocationComponent {
-    public location: Location;
+    public location = new Location(0, 0);
     public locationAvailable: boolean;
 
     constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) { }
@@ -19,7 +19,6 @@ export class LocationComponent {
     public locate() {
         if (!navigator.geolocation) {
             this.locationAvailable = false;
-            this.location = new Location(-1, -1);
             return;
         }
 
@@ -38,7 +37,6 @@ export class LocationComponent {
 
     private onLocateFailure() {
         this.locationAvailable = false;
-        this.location = new Location(-1, -1);
     }
 }
 
