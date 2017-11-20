@@ -1,27 +1,30 @@
 ﻿using System.Collections.Generic;
 using Geoloc.Models;
+using Geoloc.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Geoloc.Controllers
 {
-    public static class LocationRepository
-    {
-        public static IList<LocationModel> Locations = new List<LocationModel>();
-    }
-
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
+        private readonly ILocationRepository _repo;
+
+        public LocationController(ILocationRepository repo)
+        {
+            _repo = repo;
+        }
+
         [HttpPost("[action]")]
         public void Send([FromBody]LocationModel model)
         {
-            LocationRepository.Locations.Add(model);
+            _repo.Add(model);
         }
 
         [HttpGet("[action]")]
         public IEnumerable<LocationModel> Get()
         {
-            return LocationRepository.Locations;
+            return _repo.Get();
         }
 
     }
