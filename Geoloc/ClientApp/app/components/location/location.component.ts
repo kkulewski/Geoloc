@@ -7,7 +7,8 @@ import { Http } from "@angular/http";
     templateUrl: './location.component.html'
 })
 export class LocationComponent {
-    public location = new Location(0, 0);
+
+    public location: Location;
     public locationAvailable: boolean;
 
     constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) { }
@@ -31,7 +32,9 @@ export class LocationComponent {
 
     private onLocateSuccess(position: Position) {
         this.locationAvailable = true;
-        this.location = new Location(position.coords.latitude, position.coords.longitude);
+        this.location = new Location();
+        this.location.latitude = position.coords.latitude;
+        this.location.longitude = position.coords.longitude;
         this.sendLocation();
     }
 
@@ -41,8 +44,6 @@ export class LocationComponent {
 }
 
 export class Location {
-    constructor(public latitude: number, public longitude: number) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+    longitude: number;
+    latitude: number;
 }
