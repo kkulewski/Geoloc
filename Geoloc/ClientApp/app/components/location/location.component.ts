@@ -1,23 +1,23 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject } from "@angular/core";
 import { Http } from "@angular/http";
 
 
 @Component({
-    selector: 'location',
-    templateUrl: './location.component.html'
+    selector: "location",
+    templateUrl: "./location.component.html"
 })
 export class LocationComponent {
 
-    public location: Location;
-    public locationAvailable: boolean;
+    location: Location;
+    locationAvailable: boolean;
 
-    constructor(private http: Http, @Inject('BASE_URL') private baseUrl: string) { }
+    constructor(private http: Http, @Inject("BASE_URL") private baseUrl: string) {}
 
-    public sendLocation() {
-        this.http.post(this.baseUrl + 'api/Location/Send', this.location).subscribe(error => console.error(error));
+    sendLocation() {
+        this.http.post(this.baseUrl + "api/Location/Send", this.location).subscribe(error => console.error(error));
     }
 
-    public locate() {
+    locate() {
         if (!navigator.geolocation) {
             this.locationAvailable = false;
             return;
