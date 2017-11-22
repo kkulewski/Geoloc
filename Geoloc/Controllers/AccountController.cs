@@ -5,6 +5,8 @@ using Geoloc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Geoloc.Services.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Geoloc.Controllers
 {
@@ -42,6 +44,21 @@ namespace Geoloc.Controllers
 
             await _appDbContext.SaveChangesAsync();
             return new OkObjectResult("Account created");
+        }
+
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var token = new JwtTokenBuilder()
+                .AddSecurityKey(JwtSecurityKey.Create("secret-secret-secret"))
+                .AddSubject("hello world token")
+                .AddIssuer("Geoloc.Security.Bearer")
+                .AddAudience("Geoloc.Security.Bearer")
+                .AddClaim("MembershipId", "111")
+                .AddExpiry(10)
+                .Build();
+
+            return Ok(token.Value);
         }
     }
 }

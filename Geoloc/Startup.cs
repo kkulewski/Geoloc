@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Models;
 using Geoloc.Models.Entities;
 using Geoloc.Repository;
+using Geoloc.Services.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +17,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Geoloc
 {
@@ -35,6 +40,41 @@ namespace Geoloc
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = "Geoloc.Security.Bearer",
+                        ValidAudience = "Geoloc.Security.Bearer",
+                        IssuerSigningKey = JwtSecurityKey.Create("secret-secret-secret")
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
+                            return Task.CompletedTask;
+                        },
+                        OnTokenValidated = context =>
+                        {
+                            Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Member",
+                    policy => policy.RequireClaim("MembershipId"));
+            });
 
             const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -59,6 +99,7 @@ namespace Geoloc
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
