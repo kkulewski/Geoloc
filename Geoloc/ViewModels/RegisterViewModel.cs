@@ -1,4 +1,4 @@
-﻿namespace Geoloc.Models.ViewModels
+﻿namespace Geoloc.ViewModels
 {
     public class RegisterViewModel
     {

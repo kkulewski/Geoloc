@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Models.Entities;
-using Geoloc.Models.ViewModels;
+using Geoloc.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
