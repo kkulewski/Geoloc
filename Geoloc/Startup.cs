@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Models.Entities;
 using Geoloc.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +30,11 @@ namespace Geoloc
         {
             services.AddMvc();
             services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
+
+            services.AddAutoMapper();
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
             services.AddDbContext<ApplicationDbContext>(options =>
