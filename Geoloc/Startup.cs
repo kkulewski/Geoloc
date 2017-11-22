@@ -28,8 +28,9 @@ namespace Geoloc
             services.AddMvc();
             services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
 
+            const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(connectionString,
                     b => b.MigrationsAssembly("Geoloc")));
         }
 
