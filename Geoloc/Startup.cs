@@ -54,9 +54,9 @@ namespace Geoloc
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
-                        ValidIssuer = "Geoloc",
-                        ValidAudience = "Geoloc",
-                        IssuerSigningKey = JwtTokenBuilder.GetSecurityKey("secret-secret-secret")
+                        ValidIssuer = Configuration.GetSection("JwtTokens")["Issuer"],
+                        ValidAudience = Configuration.GetSection("JwtTokens")["Audience"],
+                        IssuerSigningKey = JwtTokenBuilder.GetSecurityKey(Configuration.GetSection("JwtTokens")["Key"])
                     };
                 });
 

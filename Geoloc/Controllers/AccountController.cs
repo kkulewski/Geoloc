@@ -7,19 +7,22 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Geoloc.Services.Jwt;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace Geoloc.Controllers
 {
     [Route("api/[controller]")]
     public class AccountController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public AccountController(UserManager<AppUser> userManager, ApplicationDbContext appDbContext, IMapper mapper)
+        public AccountController(IConfiguration configuration, UserManager<AppUser> userManager,
+            ApplicationDbContext appDbContext, IMapper mapper)
         {
+            _configuration = configuration;
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
@@ -51,12 +54,9 @@ namespace Geoloc.Controllers
         public IActionResult Index()
         {
             var token = new JwtTokenBuilder()
-                .AddSecurityKey("secret-secret-secret")
+                .UseDefaultConfiguration(_configuration)
                 .AddSubject("Login token")
-                .AddIssuer("Geoloc")
-                .AddAudience("Geoloc")
                 .AddClaim("MembershipId", "111")
-                .AddExpiry(10)
                 .Build();
 
             return Ok(new JwtSecurityTokenHandler().WriteToken(token));

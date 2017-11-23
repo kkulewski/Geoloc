@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Geoloc.Services.Jwt
@@ -21,9 +22,36 @@ namespace Geoloc.Services.Jwt
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         }
 
+        public JwtTokenBuilder UseDefaultConfiguration(IConfiguration config)
+        {
+            AddIssuer(config.GetSection("JwtTokens")["Issuer"]);
+            AddAudience(config.GetSection("JwtTokens")["Audience"]);
+            AddSecurityKey(config.GetSection("JwtTokens")["Key"]);
+            AddExpiry(int.Parse(config.GetSection("JwtTokens")["Expiry"]));
+            return this;
+        }
+        
+        public JwtTokenBuilder AddIssuer(string issuer)
+        {
+            _issuer = issuer;
+            return this;
+        }
+        
+        public JwtTokenBuilder AddAudience(string audience)
+        {
+            _audience = audience;
+            return this;
+        }
+
         public JwtTokenBuilder AddSecurityKey(string key)
         {
             _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            return this;
+        }
+        
+        public JwtTokenBuilder AddExpiry(int expiryInMinutes)
+        {
+            _expiryInMinutes = expiryInMinutes;
             return this;
         }
 
@@ -33,27 +61,9 @@ namespace Geoloc.Services.Jwt
             return this;
         }
 
-        public JwtTokenBuilder AddIssuer(string issuer)
-        {
-            _issuer = issuer;
-            return this;
-        }
-
-        public JwtTokenBuilder AddAudience(string audience)
-        {
-            _audience = audience;
-            return this;
-        }
-
         public JwtTokenBuilder AddClaim(string type, string value)
         {
             _claims.Add(new Claim(type, value));
-            return this;
-        }
-
-        public JwtTokenBuilder AddExpiry(int expiryInMinutes)
-        {
-            _expiryInMinutes = expiryInMinutes;
             return this;
         }
 
