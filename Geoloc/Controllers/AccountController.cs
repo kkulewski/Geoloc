@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Models.Entities;
 using Geoloc.ViewModels;
@@ -50,15 +51,15 @@ namespace Geoloc.Controllers
         public IActionResult Index()
         {
             var token = new JwtTokenBuilder()
-                .AddSecurityKey(JwtSecurityKey.Create("secret-secret-secret"))
-                .AddSubject("hello world token")
-                .AddIssuer("Geoloc.Security.Bearer")
-                .AddAudience("Geoloc.Security.Bearer")
+                .AddSecurityKey("secret-secret-secret")
+                .AddSubject("Login token")
+                .AddIssuer("Geoloc")
+                .AddAudience("Geoloc")
                 .AddClaim("MembershipId", "111")
                 .AddExpiry(10)
                 .Build();
 
-            return Ok(token.Value);
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
     }
 }

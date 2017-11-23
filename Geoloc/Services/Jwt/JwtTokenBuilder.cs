@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Geoloc.Services.Jwt
@@ -10,15 +10,20 @@ namespace Geoloc.Services.Jwt
     public sealed class JwtTokenBuilder
     {
         private SecurityKey _securityKey;
-        private string _subject = "";
-        private string _issuer = "";
-        private string _audience = "";
-        private readonly Dictionary<string, string> _claims = new Dictionary<string, string>();
+        private string _subject;
+        private string _issuer;
+        private string _audience;
+        private readonly IList<Claim> _claims = new List<Claim>();
         private int _expiryInMinutes = 5;
 
-        public JwtTokenBuilder AddSecurityKey(SecurityKey securityKey)
+        public static SecurityKey GetSecurityKey(string key)
         {
-            _securityKey = securityKey;
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        }
+
+        public JwtTokenBuilder AddSecurityKey(string key)
+        {
+            _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             return this;
         }
 
@@ -42,13 +47,7 @@ namespace Geoloc.Services.Jwt
 
         public JwtTokenBuilder AddClaim(string type, string value)
         {
-            _claims.Add(type, value);
-            return this;
-        }
-
-        public JwtTokenBuilder AddClaims(Dictionary<string, string> claims)
-        {
-            _claims.Union(claims);
+            _claims.Add(new Claim(type, value));
             return this;
         }
 
@@ -58,42 +57,35 @@ namespace Geoloc.Services.Jwt
             return this;
         }
 
-        public JwtToken Build()
+        public JwtSecurityToken Build()
         {
             EnsureArguments();
 
-            var claims = new List<Claim>
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, _subject),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                }
-                .Union(_claims.Select(item => new Claim(item.Key, item.Value)));
+            _claims.Add(new Claim(JwtRegisteredClaimNames.Sub, _subject));
+            _claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
-            var token = new JwtSecurityToken(
-                issuer: _issuer,
-                audience: _audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_expiryInMinutes),
-                signingCredentials: new SigningCredentials(
-                    _securityKey,
-                    SecurityAlgorithms.HmacSha256));
-
-            return new JwtToken(token);
+            return new JwtSecurityToken(
+                _issuer,
+                _audience,
+                _claims,
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddMinutes(_expiryInMinutes),
+                new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256));
         }
 
         private void EnsureArguments()
         {
             if (_securityKey == null)
-                throw new ArgumentNullException("Security Key");
+                throw new ArgumentNullException(nameof(_securityKey));
 
             if (string.IsNullOrEmpty(_subject))
-                throw new ArgumentNullException("Subject");
+                throw new ArgumentNullException(nameof(_subject));
 
             if (string.IsNullOrEmpty(_issuer))
-                throw new ArgumentNullException("Issuer");
+                throw new ArgumentNullException(nameof(_issuer));
 
             if (string.IsNullOrEmpty(_audience))
-                throw new ArgumentNullException("Audience");
+                throw new ArgumentNullException(nameof(_audience));
         }
     }
 }

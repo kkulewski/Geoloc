@@ -54,22 +54,22 @@ namespace Geoloc
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
-                        ValidIssuer = "Geoloc.Security.Bearer",
-                        ValidAudience = "Geoloc.Security.Bearer",
-                        IssuerSigningKey = JwtSecurityKey.Create("secret-secret-secret")
+                        ValidIssuer = "Geoloc",
+                        ValidAudience = "Geoloc",
+                        IssuerSigningKey = JwtTokenBuilder.GetSecurityKey("secret-secret-secret")
                     };
                 });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Member",
-                    policy => policy.RequireClaim("MembershipId"));
+                options.AddPolicy("Member", policy => policy.RequireClaim("MembershipId"));
             });
 
-            const string connectionString = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
+            const string connection = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString,
-                    b => b.MigrationsAssembly("Geoloc")));
+            {
+                options.UseSqlServer(connection, b => b.MigrationsAssembly("Geoloc"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
