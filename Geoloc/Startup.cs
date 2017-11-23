@@ -41,7 +41,8 @@ namespace Geoloc
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(option =>
+            services
+                .AddAuthentication(option =>
                 {
                     option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -56,20 +57,6 @@ namespace Geoloc
                         ValidIssuer = "Geoloc.Security.Bearer",
                         ValidAudience = "Geoloc.Security.Bearer",
                         IssuerSigningKey = JwtSecurityKey.Create("secret-secret-secret")
-                    };
-
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
-                        {
-                            Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
-                            return Task.CompletedTask;
-                        },
-                        OnTokenValidated = context =>
-                        {
-                            Console.WriteLine("OnTokenValidated: " + context.SecurityToken);
-                            return Task.CompletedTask;
-                        }
                     };
                 });
 
