@@ -28,15 +28,14 @@ namespace Geoloc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddAutoMapper();
             services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
 
-            services.AddAutoMapper();
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services
-                .AddAuthentication(options =>
+            services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -59,11 +58,10 @@ namespace Geoloc
             {
                 options.AddPolicy("Member", policy => policy.RequireClaim("MembershipId"));
             });
-
-            const string connection = "Server=(localdb)\\mssqllocaldb;Database=geoloc;Trusted_Connection=True;";
+            
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("Geoloc"));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalDb"), b => b.MigrationsAssembly("Geoloc"));
             });
         }
 
