@@ -10,55 +10,36 @@ namespace Geoloc.Services.Jwt
 {
     public sealed class JwtTokenBuilder
     {
-        private SecurityKey _securityKey;
-        private string _subject;
-        private string _issuer;
-        private string _audience;
+        private readonly string _issuer;
+        private readonly string _audience;
+        private readonly SecurityKey _securityKey;
+        private readonly int _expiryInMinutes;
+        private readonly string _subject;
         private readonly IList<Claim> _claims = new List<Claim>();
-        private int _expiryInMinutes = 5;
 
         public static SecurityKey GetSecurityKey(string key)
         {
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         }
 
-        public JwtTokenBuilder UseDefaultConfiguration(IConfiguration config)
-        {
-            AddIssuer(config.GetSection("JwtTokens")["Issuer"]);
-            AddAudience(config.GetSection("JwtTokens")["Audience"]);
-            AddSecurityKey(config.GetSection("JwtTokens")["Key"]);
-            AddExpiry(int.Parse(config.GetSection("JwtTokens")["Expiry"]));
-            return this;
-        }
-        
-        public JwtTokenBuilder AddIssuer(string issuer)
+        public JwtTokenBuilder(string issuer, string audience, string key, int expiryInMinutes, string subject)
         {
             _issuer = issuer;
-            return this;
-        }
-        
-        public JwtTokenBuilder AddAudience(string audience)
-        {
             _audience = audience;
-            return this;
-        }
-
-        public JwtTokenBuilder AddSecurityKey(string key)
-        {
-            _securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            return this;
-        }
-        
-        public JwtTokenBuilder AddExpiry(int expiryInMinutes)
-        {
+            _securityKey = GetSecurityKey(key);
             _expiryInMinutes = expiryInMinutes;
-            return this;
+            _subject = subject;
+            AddDefaultClaims();
         }
 
-        public JwtTokenBuilder AddSubject(string subject)
+        public JwtTokenBuilder(IConfiguration config, string subject)
         {
+            _issuer = config.GetSection("JwtTokens")["Issuer"];
+            _audience = config.GetSection("JwtTokens")["Audience"];
+            _securityKey = GetSecurityKey(config.GetSection("JwtTokens")["Key"]);
+            _expiryInMinutes = int.Parse(config.GetSection("JwtTokens")["Expiry"]);
             _subject = subject;
-            return this;
+            AddDefaultClaims();
         }
 
         public JwtTokenBuilder AddClaim(string type, string value)
@@ -69,11 +50,6 @@ namespace Geoloc.Services.Jwt
 
         public JwtSecurityToken Build()
         {
-            EnsureArguments();
-
-            _claims.Add(new Claim(JwtRegisteredClaimNames.Sub, _subject));
-            _claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-
             return new JwtSecurityToken(
                 _issuer,
                 _audience,
@@ -82,20 +58,12 @@ namespace Geoloc.Services.Jwt
                 DateTime.UtcNow.AddMinutes(_expiryInMinutes),
                 new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256));
         }
-
-        private void EnsureArguments()
+        
+        private void AddDefaultClaims()
         {
-            if (_securityKey == null)
-                throw new ArgumentNullException(nameof(_securityKey));
-
-            if (string.IsNullOrEmpty(_subject))
-                throw new ArgumentNullException(nameof(_subject));
-
-            if (string.IsNullOrEmpty(_issuer))
-                throw new ArgumentNullException(nameof(_issuer));
-
-            if (string.IsNullOrEmpty(_audience))
-                throw new ArgumentNullException(nameof(_audience));
+            var tokenId = Guid.NewGuid().ToString();
+            _claims.Add(new Claim(JwtRegisteredClaimNames.Jti, tokenId));
+            _claims.Add(new Claim(JwtRegisteredClaimNames.Sub, _subject));
         }
     }
 }

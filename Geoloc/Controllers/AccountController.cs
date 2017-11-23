@@ -53,9 +53,7 @@ namespace Geoloc.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var token = new JwtTokenBuilder()
-                .UseDefaultConfiguration(_configuration)
-                .AddSubject("Login token")
+            var token = new JwtTokenBuilder(_configuration, "MemberToken")
                 .AddClaim("MembershipId", "111")
                 .Build();
 

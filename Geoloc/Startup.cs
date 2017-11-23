@@ -42,11 +42,12 @@ namespace Geoloc
                 .AddDefaultTokenProviders();
 
             services
-                .AddAuthentication(option =>
+                .AddAuthentication(options =>
                 {
-                    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(options => {
+                .AddJwtBearer(options =>
+                {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
