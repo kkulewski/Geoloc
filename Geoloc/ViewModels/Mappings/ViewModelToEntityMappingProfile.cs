@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Geoloc.ViewModels;
 using Geoloc.Models.Entities;
 
-namespace Geoloc.Models.ViewModels.Mappings
+namespace Geoloc.ViewModels.Mappings
 {
     public class ViewModelToEntityMappingProfile : Profile
     {

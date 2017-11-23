@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Geoloc.Data;
-using Geoloc.Models;
 using Geoloc.Models.Entities;
 using Geoloc.Repository;
 using Geoloc.Services.Jwt;
