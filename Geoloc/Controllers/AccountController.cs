@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Models.Entities;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Geoloc.Services.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
 namespace Geoloc.Controllers
@@ -54,10 +56,17 @@ namespace Geoloc.Controllers
         public IActionResult Index()
         {
             var token = new JwtTokenBuilder(_configuration, "MemberToken")
-                .AddClaim("MembershipId", "111")
+                .AddClaim("MembershipId", "123")
                 .Build();
 
             return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+        
+        [HttpGet("[action]")]
+        [Authorize(Policy = "Member")]
+        public IActionResult Claims()
+        {
+            return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
         }
     }
 }
