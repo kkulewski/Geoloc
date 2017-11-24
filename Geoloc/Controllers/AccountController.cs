@@ -102,17 +102,13 @@ namespace Geoloc.Controllers
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
                 return null;
-
-            // get the user to verifty
+            
             var userToVerify = await _userManager.FindByNameAsync(userName);
             if (userToVerify == null)
                 return null;
-
-            // check the credentials  
+            
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
-            {
                 return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
-            }
 
             // Credentials are invalid, or account doesn't exist
             return null;
