@@ -1,29 +1,30 @@
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 
 @Component({
     selector: 'register',
     templateUrl: './register.component.html'
 })
 export class RegisterComponent {
-    isRequesting: boolean;
-    submitted: boolean = false;
+    isRequesting: boolean = false;
+    resultMessage = "";
 
     constructor(private router: Router, private http: Http, @Inject("BASE_URL") private baseUrl: string) {}
 
     registerUser({ value, valid }: { value: IUserRegistration, valid: boolean }) {
-        this.submitted = true;
         this.isRequesting = true;
         if (valid) {
             this.register(value.email, value.password, value.firstName, value.lastName)
                 .subscribe(
-                    result => {
-                        if (result) {
-                            this.router.navigate(['/home'], { queryParams: { name: value.firstName } });
-                        }
+                    (response: Response) => {
+                        this.resultMessage = response.text();
+                        this.isRequesting = false;
                     },
-                    errors => console.error(errors));
+                    error => {
+                        this.resultMessage = error.text();
+                        this.isRequesting = false;
+                    });
         }
     }
 

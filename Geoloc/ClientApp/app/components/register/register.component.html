@@ -25,8 +25,8 @@
         <button type="submit" class="btn btn-primary" [disabled]="f.invalid || isRequesting">Sign Up</button>
     </div>
 
-    <div *ngIf="errors" class="alert alert-danger" role="alert">
-        <strong>Oops!</strong> {{errors}}
+    <div *ngIf="resultMessage">
+        <strong>Result:</strong> {{resultMessage}}
     </div>
 
 </form>
