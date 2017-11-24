@@ -50,7 +50,7 @@ namespace Geoloc
 
                         ValidIssuer = Configuration.GetSection("JwtTokens")["Issuer"],
                         ValidAudience = Configuration.GetSection("JwtTokens")["Audience"],
-                        IssuerSigningKey = JwtTokenBuilder.GetSecurityKey(Configuration.GetSection("JwtTokens")["Key"])
+                        IssuerSigningKey = JwtTokenFactory.GetSecurityKey(Configuration.GetSection("JwtTokens")["Key"])
                     };
                 });
 
