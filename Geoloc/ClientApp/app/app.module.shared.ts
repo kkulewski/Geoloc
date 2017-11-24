@@ -10,7 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { LocationComponent } from './components/location/location.component';
-import { RegisterComponent } from './components/register/register.component';
+import { RegisterComponent } from './components/account/register/register.component';
 
 @NgModule({
     declarations: [
