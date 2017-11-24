@@ -1,14 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Response } from '@angular/http';
-import { IRegisterModel } from '../models/register.model';
+import { ILoginModel } from '../models/login.model';
 import { AccountService } from '../account.service';
 
 @Component({
-    selector: 'register',
-    templateUrl: './register.component.html'
+    selector: 'login',
+    templateUrl: './login.component.html'
 })
-export class RegisterComponent {
+export class LoginComponent {
     isRequesting: boolean = false;
     resultMessage = "";
     accountService: AccountService;
@@ -17,10 +17,10 @@ export class RegisterComponent {
         this.accountService = new AccountService(this.http, this.baseUrl);
     }
 
-    registerUser({ value, valid }: { value: IRegisterModel, valid: boolean }) {
+    loginUser({ value, valid }: { value: ILoginModel, valid: boolean }) {
         this.isRequesting = true;
         if (valid) {
-            this.accountService.register(value.email, value.password, value.firstName, value.lastName)
+            this.accountService.login(value.email, value.password)
                 .subscribe(
                     (response: Response) => {
                         this.resultMessage = response.text();

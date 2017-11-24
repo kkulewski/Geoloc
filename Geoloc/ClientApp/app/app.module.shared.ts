@@ -11,6 +11,7 @@ import { FetchDataComponent } from './components/fetchdata/fetchdata.component';
 import { CounterComponent } from './components/counter/counter.component';
 import { LocationComponent } from './components/location/location.component';
 import { RegisterComponent } from './components/account/register/register.component';
+import { LoginComponent } from './components/account/login/login.component';
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { RegisterComponent } from './components/account/register/register.compon
         LocationComponent,
         FetchDataComponent,
         HomeComponent,
-        RegisterComponent
+        RegisterComponent,
+        LoginComponent
     ],
     imports: [
         CommonModule,
@@ -33,6 +35,7 @@ import { RegisterComponent } from './components/account/register/register.compon
             { path: 'location', component: LocationComponent },
             { path: 'fetch-data', component: FetchDataComponent },
             { path: 'register', component: RegisterComponent },
+            { path: 'login', component: LoginComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]
