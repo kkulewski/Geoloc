@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Models.Entities;
@@ -51,22 +53,75 @@ namespace Geoloc.Controllers
             await _appDbContext.SaveChangesAsync();
             return new OkObjectResult("Account created");
         }
-
+        
         [HttpGet]
         public IActionResult Index()
         {
-            var token = new JwtTokenBuilder(_configuration, "MemberToken")
+            var token = new JwtTokenFactory(_configuration, "MemberToken")
                 .AddClaim("MembershipId", "123")
                 .Build();
 
             return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
-        
+
         [HttpGet("[action]")]
         [Authorize(Policy = "Member")]
         public IActionResult Claims()
         {
             return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody]LoginViewModel credentials)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
+            if (identity == null)
+                return BadRequest(ModelState.TryAddModelError("login_failure", "Invalid username or password."));
+
+            var token = new JwtTokenFactory(_configuration, credentials.UserName)
+                .AddClaim(identity.FindFirst("rol"))
+                .AddClaim(identity.FindFirst("id"))
+                .Build();
+
+            var response = new
+            {
+                id = identity.Claims.Single(c => c.Type == "id").Value,
+                auth_token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
+
+            return new OkObjectResult(response);
+        }
+
+        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
+        {
+            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            {
+                // get the user to verifty
+                var userToVerify = await _userManager.FindByNameAsync(userName);
+                if (userToVerify != null)
+                {
+                    // check the credentials  
+                    if (await _userManager.CheckPasswordAsync(userToVerify, password))
+                    {
+                        return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
+                    }
+                }
+            }
+
+            // Credentials are invalid, or account doesn't exist
+            return await Task.FromResult<ClaimsIdentity>(null);
+        }
+
+        private ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
+        {
+            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
+            {
+                new Claim("id", id),
+                new Claim("rol", "api_access")
+            });
         }
     }
 }
