@@ -12,10 +12,11 @@ using System.Threading.Tasks;
 using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Geoloc.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -32,9 +33,27 @@ namespace Geoloc.Controllers
             _appDbContext = appDbContext;
         }
 
-        // POST api/account
+        // GET api/account/addclaim
+        [HttpGet]
+        public IActionResult AddClaim()
+        {
+            var token = new JwtTokenFactory(_configuration, "MemberToken")
+                .AddClaim("MembershipId", "123")
+                .Build();
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+        }
+
+        // GET api/account/checkclaim
+        [HttpGet]
+        public IActionResult CheckClaim()
+        {
+            return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
+        }
+
+        // POST api/account/register
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -53,24 +72,8 @@ namespace Geoloc.Controllers
             await _appDbContext.SaveChangesAsync();
             return new OkObjectResult("Account created");
         }
-        
-        [HttpGet]
-        public IActionResult Index()
-        {
-            var token = new JwtTokenFactory(_configuration, "MemberToken")
-                .AddClaim("MembershipId", "123")
-                .Build();
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-        }
-
-        [HttpGet("[action]")]
-        [Authorize(Policy = "Member")]
-        public IActionResult Claims()
-        {
-            return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
-        }
-        
+        // POST api/account/login
         [HttpPost]
         public async Task<IActionResult> Login([FromBody]LoginViewModel credentials)
         {
@@ -91,37 +94,40 @@ namespace Geoloc.Controllers
                 id = identity.Claims.Single(c => c.Type == "id").Value,
                 auth_token = new JwtSecurityTokenHandler().WriteToken(token)
             };
-
-            return new OkObjectResult(response);
+            
+            return new OkObjectResult(JsonConvert.SerializeObject(response));
         }
 
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+                return null;
+
+            // get the user to verifty
+            var userToVerify = await _userManager.FindByNameAsync(userName);
+            if (userToVerify == null)
+                return null;
+
+            // check the credentials  
+            if (await _userManager.CheckPasswordAsync(userToVerify, password))
             {
-                // get the user to verifty
-                var userToVerify = await _userManager.FindByNameAsync(userName);
-                if (userToVerify != null)
-                {
-                    // check the credentials  
-                    if (await _userManager.CheckPasswordAsync(userToVerify, password))
-                    {
-                        return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
-                    }
-                }
+                return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
             }
 
             // Credentials are invalid, or account doesn't exist
-            return await Task.FromResult<ClaimsIdentity>(null);
+            return null;
         }
 
         private ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
         {
-            return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
+            var identity = new GenericIdentity(userName, "Token");
+            var claims = new[]
             {
                 new Claim("id", id),
                 new Claim("rol", "api_access")
-            });
+            };
+
+            return new ClaimsIdentity(identity, claims);
         }
     }
 }
