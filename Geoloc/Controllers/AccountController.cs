@@ -82,7 +82,10 @@ namespace Geoloc.Controllers
 
             var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
             if (identity == null)
-                return BadRequest(ModelState.TryAddModelError("login_failure", "Invalid username or password."));
+            {
+                ModelState.TryAddModelError("login_failure", "Invalid username or password.");
+                return new BadRequestObjectResult(ModelState);
+            }
 
             var token = new JwtTokenFactory(_configuration, credentials.UserName)
                 .AddClaim(identity.FindFirst("rol"))

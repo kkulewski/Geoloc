@@ -12,6 +12,7 @@ export class LoginComponent {
     isRequesting: boolean = false;
     resultMessage = "";
     accountService: AccountService;
+    authToken: string;
 
     constructor(private router: Router, private http: Http, @Inject("BASE_URL") private baseUrl: string) {
         this.accountService = new AccountService(this.http, this.baseUrl);
@@ -22,8 +23,10 @@ export class LoginComponent {
         if (valid) {
             this.accountService.login(value.email, value.password)
                 .subscribe(
-                    (response: Response) => {
-                        this.resultMessage = response.text();
+                    result => {
+                        console.info(result.json());
+                        this.authToken = (result.json() as ILoginResponse).auth_token;
+                        this.resultMessage = result.text();
                         this.isRequesting = false;
                     },
                     error => {
@@ -32,4 +35,9 @@ export class LoginComponent {
                     });
         }
     }
+}
+
+export interface ILoginResponse {
+    id: string;
+    auth_token: string; 
 }
