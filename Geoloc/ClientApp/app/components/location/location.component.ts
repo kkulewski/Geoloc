@@ -35,6 +35,7 @@ export class LocationComponent {
         this.location = new Location();
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
+        this.location.timestamp = Date.now();
         let userName = localStorage.getItem("user_name");
         if (userName != null) {
             this.location.userName = userName;
@@ -50,5 +51,6 @@ export class LocationComponent {
 export class Location {
     longitude: number;
     latitude: number;
+    timestamp: number;
     userName: string;
 }
