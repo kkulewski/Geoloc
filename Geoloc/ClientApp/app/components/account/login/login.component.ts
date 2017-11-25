@@ -37,6 +37,10 @@ export class LoginComponent {
                     });
         }
     }
+
+    logoutUser() {
+        localStorage.removeItem("auth_token");
+    }
 }
 
 export interface ILoginResponse {
