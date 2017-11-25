@@ -21,7 +21,7 @@
         <strong>Result:</strong> {{resultMessage}}
     </div>
     
-    <div *ngIf="authToken">
-        <strong>Token:</strong> {{authToken}}
-    </div>
+    <div *ngIf="authToken()">
+        <strong>Token:</strong> {{authToken()}}
+</div>
 </form>

@@ -12,7 +12,10 @@ export class LoginComponent {
     isRequesting: boolean = false;
     resultMessage = "";
     accountService: AccountService;
-    authToken: string;
+
+    authToken() {
+        return localStorage.getItem("auth_token");
+    }
 
     constructor(private router: Router, private http: Http, @Inject("BASE_URL") private baseUrl: string) {
         this.accountService = new AccountService(this.http, this.baseUrl);
@@ -24,8 +27,7 @@ export class LoginComponent {
             this.accountService.login(value.email, value.password)
                 .subscribe(
                     result => {
-                        console.info(result.json());
-                        this.authToken = (result.json() as ILoginResponse).auth_token;
+                        localStorage.setItem("auth_token", (result.json() as ILoginResponse).auth_token);
                         this.resultMessage = result.text();
                         this.isRequesting = false;
                     },
