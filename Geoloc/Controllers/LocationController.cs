@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Geoloc.Models;
 using Geoloc.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -27,5 +28,10 @@ namespace Geoloc.Controllers
             return _repo.Get();
         }
 
+        [HttpGet("get/last")]
+        public IEnumerable<LocationModel> GetLastKnownLocations()
+        {
+            return _repo.Get().GroupBy(e => e.UserName).Select(e => e.FirstOrDefault());
+        }
     }
 }
