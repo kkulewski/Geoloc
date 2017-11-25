@@ -11,7 +11,6 @@ import { AccountService } from '../account.service';
 export class LoginComponent {
     isRequesting: boolean = false;
     resultMessage = "";
-    userName: string;
     accountService: AccountService;
 
     authToken() {
@@ -20,6 +19,14 @@ export class LoginComponent {
 
     userId() {
         return localStorage.getItem("user_id");
+    }
+
+    userName() {
+        let name = localStorage.getItem("user_name");
+        if (name == null) {
+            this.getUserName();
+        }
+        return localStorage.getItem("user_name");
     }
 
     constructor(private router: Router, private http: Http, @Inject("BASE_URL") private baseUrl: string) {
@@ -46,14 +53,14 @@ export class LoginComponent {
     }
 
     getUserName() {
-        if (this.userName == null && !this.isRequesting) {
+        if (!this.isRequesting) {
             this.isRequesting = true;
             let id = this.userId();
             if (id != null) {
                 this.accountService.getUserName(id)
                     .subscribe(
                         result => {
-                            this.userName = result.json() as string;
+                            localStorage.setItem("user_name", result.json() as string);
                             this.isRequesting = false;
                         },
                         error => {
@@ -62,13 +69,12 @@ export class LoginComponent {
                         });
             }
         }
-
-        return this.userName;
     }
 
     logoutUser() {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("user_id");
+        localStorage.removeItem("user_name");
     }
 }
 
