@@ -19,4 +19,12 @@ export class AccountService {
 
         return this.http.post(this.baseUrl + 'api/account/login', body, options);
     }
+
+    getUserName(id: string) {
+        let body = JSON.stringify(id);
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        return this.http.post(this.baseUrl + 'api/account/username', body, options);
+    }
 }

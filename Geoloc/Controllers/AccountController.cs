@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Geoloc.Services.Jwt;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -49,6 +48,16 @@ namespace Geoloc.Controllers
         public IActionResult CheckClaim()
         {
             return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
+        }
+
+        // POST api/account/username
+        [HttpPost]
+        public async Task<IActionResult> Username([FromBody]string id)
+        {
+            var result = await _userManager.FindByIdAsync(id);
+            var username = result.UserName;
+
+            return new OkObjectResult(JsonConvert.SerializeObject(username));
         }
 
         // POST api/account/register

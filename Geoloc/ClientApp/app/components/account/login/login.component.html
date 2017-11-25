@@ -21,8 +21,9 @@
         <strong>Result:</strong> {{resultMessage}}
     </div>
     
-    <div *ngIf="authToken()">
-        <strong>Token:</strong> {{authToken()}} <br/>
-        <button (click)="logoutUser()">Logout</button>
+    <div *ngIf="authToken() && userId()">
+        <strong>User ID: </strong> {{userId()}} <br />
+        <strong>User name: </strong> {{getUserName()}}<br />
+        <button (click)="logoutUser()" class="btn btn-danger">Logout</button>
     </div>
 </form>

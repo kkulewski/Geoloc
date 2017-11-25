@@ -11,10 +11,15 @@ import { AccountService } from '../account.service';
 export class LoginComponent {
     isRequesting: boolean = false;
     resultMessage = "";
+    userName: string;
     accountService: AccountService;
 
     authToken() {
         return localStorage.getItem("auth_token");
+    }
+
+    userId() {
+        return localStorage.getItem("user_id");
     }
 
     constructor(private router: Router, private http: Http, @Inject("BASE_URL") private baseUrl: string) {
@@ -26,8 +31,10 @@ export class LoginComponent {
         if (valid) {
             this.accountService.login(value.email, value.password)
                 .subscribe(
-                    result => {
-                        localStorage.setItem("auth_token", (result.json() as ILoginResponse).auth_token);
+                result => {
+                        let response = result.json() as ILoginResponse;
+                        localStorage.setItem("auth_token", response.auth_token);
+                        localStorage.setItem("user_id", response.id);
                         this.resultMessage = result.text();
                         this.isRequesting = false;
                     },
@@ -38,8 +45,30 @@ export class LoginComponent {
         }
     }
 
+    getUserName() {
+        if (this.userName == null && !this.isRequesting) {
+            this.isRequesting = true;
+            let id = this.userId();
+            if (id != null) {
+                this.accountService.getUserName(id)
+                    .subscribe(
+                        result => {
+                            this.userName = result.json() as string;
+                            this.isRequesting = false;
+                        },
+                        error => {
+                            console.error(error);
+                            this.isRequesting = false;
+                        });
+            }
+        }
+
+        return this.userName;
+    }
+
     logoutUser() {
         localStorage.removeItem("auth_token");
+        localStorage.removeItem("user_id");
     }
 }
 
