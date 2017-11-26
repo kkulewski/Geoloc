@@ -3,6 +3,7 @@ using System.Linq;
 using Geoloc.Models;
 using Geoloc.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Geoloc.Controllers
 {
@@ -17,9 +18,13 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public void Send([FromBody]LocationModel model)
+        public IActionResult Send([FromBody]LocationModel model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
             _repo.Add(model);
+            return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
         [HttpGet("[action]")]
