@@ -79,7 +79,7 @@ namespace Geoloc.Controllers
             }
 
             await _appDbContext.SaveChangesAsync();
-            return new OkObjectResult("Account created");
+            return new OkObjectResult(JsonConvert.SerializeObject("Account created"));
         }
 
         // POST api/account/login
@@ -93,7 +93,7 @@ namespace Geoloc.Controllers
             if (identity == null)
             {
                 ModelState.TryAddModelError("login_failure", "Invalid username or password.");
-                return new BadRequestObjectResult(ModelState);
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(ModelState));
             }
 
             var token = new JwtTokenFactory(_configuration, credentials.UserName)
