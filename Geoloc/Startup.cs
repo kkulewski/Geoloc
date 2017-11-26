@@ -29,6 +29,8 @@ namespace Geoloc
         {
             services.AddMvc();
             services.AddAutoMapper();
+            services.AddCors();
+
             services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
 
             services.AddIdentity<AppUser, IdentityRole>()
@@ -80,6 +82,12 @@ namespace Geoloc
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
 
             app.UseStaticFiles();
             app.UseAuthentication();
