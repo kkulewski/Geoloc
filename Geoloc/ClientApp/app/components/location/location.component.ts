@@ -10,6 +10,7 @@ export class LocationComponent {
 
     location: Location;
     locationAvailable: boolean;
+    result: string = "not run";
 
     constructor(private http: Http, @Inject("BASE_URL") private baseUrl: string) {}
 
@@ -20,18 +21,21 @@ export class LocationComponent {
     locate() {
         if (!navigator.geolocation) {
             this.locationAvailable = false;
+            this.result = "navigator not available";
             return;
         }
 
+        this.result = "getting...";
+
         navigator.geolocation.getCurrentPosition(
-            (pos) => this.onLocateSuccess(pos),
-            this.onLocateFailure,
-            { timeout: 10000 }
+            pos => this.onLocateSuccess(pos),
+            error => this.onLocateFailure
         );
     }
 
     private onLocateSuccess(position: Position) {
         this.locationAvailable = true;
+        this.result = "success";
         this.location = new Location();
         this.location.latitude = position.coords.latitude;
         this.location.longitude = position.coords.longitude;
@@ -45,6 +49,7 @@ export class LocationComponent {
 
     private onLocateFailure() {
         this.locationAvailable = false;
+        this.result = "navigator not available";
     }
 }
 
