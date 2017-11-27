@@ -34,9 +34,10 @@ namespace Geoloc.Controllers
         }
 
         [HttpGet("get/last")]
-        public IEnumerable<LocationModel> GetLastKnownLocations()
+        public IActionResult GetLastKnownLocations()
         {
-            return _repo.Get().GroupBy(e => e.UserName).Select(e => e.FirstOrDefault());
+            var locations = _repo.Get().GroupBy(e => e.UserName).Select(e => e.FirstOrDefault());
+            return new OkObjectResult(JsonConvert.SerializeObject(locations));
         }
     }
 }
