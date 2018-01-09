@@ -5,8 +5,8 @@ namespace Geoloc.Repository
 {
     public interface ILocationRepository
     {
-        void Add(LocationModel model);
+        void Add(LocationWebModel webModel);
 
-        IEnumerable<LocationModel> Get();
+        IEnumerable<LocationWebModel> Get();
     }
 }

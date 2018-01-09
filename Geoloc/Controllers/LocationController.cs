@@ -18,17 +18,17 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody]LocationModel model)
+        public IActionResult Send([FromBody]LocationWebModel webModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            _repo.Add(model);
+            _repo.Add(webModel);
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
         [HttpGet("[action]")]
-        public IEnumerable<LocationModel> Get()
+        public IEnumerable<LocationWebModel> Get()
         {
             return _repo.Get();
         }
