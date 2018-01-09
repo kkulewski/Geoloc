@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Geoloc.Models;
+using Geoloc.Models.Entities;
 
-namespace Geoloc.Repository
+namespace Geoloc.Data.Repositories
 {
     public interface ILocationRepository
     {
-        void Add(LocationWebModel webModel);
-
-        IEnumerable<LocationWebModel> Get();
+        void Add(Location model);
+        IEnumerable<Location> GetByUser(string userId);
+        IEnumerable<Location> GetAllLocations();
     }
 }

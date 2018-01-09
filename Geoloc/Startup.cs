@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Data.Repositories;
 using Geoloc.Models.Entities;
-using Geoloc.Repository;
 using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Geoloc
@@ -30,7 +31,9 @@ namespace Geoloc
             services.AddAutoMapper();
             services.AddCors();
 
-            services.AddSingleton<ILocationRepository, InMemoryLocationRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+
 
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Geoloc.Data.Repositories;
 using Geoloc.Models;
-using Geoloc.Repository;
+using Geoloc.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,11 +12,11 @@ namespace Geoloc.Controllers
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
-        private readonly ILocationRepository _repo;
+        private readonly ILocationRepository _locationRepository;
 
-        public LocationController(ILocationRepository repo)
+        public LocationController(ILocationRepository locationRepository)
         {
-            _repo = repo;
+            _locationRepository = locationRepository;
         }
 
         [HttpPost("[action]")]
@@ -22,22 +24,36 @@ namespace Geoloc.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-
-            _repo.Add(webModel);
+            var model = new Location
+            {
+                AppUser = new AppUser(),
+                Latitude = webModel.Latitude,
+                Longitude = webModel.Longitude
+            };
+            _locationRepository.Add(model);
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
-        [HttpGet("[action]")]
-        public IEnumerable<LocationWebModel> Get()
+        [HttpGet("[action]/{userId}")]
+        public IEnumerable<Location> Get(string userId)
         {
-            return _repo.Get();
+            return _locationRepository.GetByUser(userId);
         }
 
         [HttpGet("get/last")]
         public IActionResult GetLastKnownLocations()
         {
-            var locations = _repo.Get().GroupBy(e => e.UserName).Select(e => e.FirstOrDefault());
-            return new OkObjectResult(JsonConvert.SerializeObject(locations));
+            var locations = _locationRepository.GetAllLocations()
+                .GroupBy(e => e.AppUser.Id)
+                .Select(e => e.FirstOrDefault());
+            var locationWebModels = locations.Select(x => new LocationWebModel
+            {
+                Longitude = x.Longitude,
+                Latitude = x.Latitude,
+                Timestamp = DateTime.Now.ToFileTime(),
+
+            });
+            return new OkObjectResult(locationWebModels);
         }
     }
 }
