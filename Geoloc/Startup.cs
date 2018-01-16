@@ -32,6 +32,7 @@ namespace Geoloc
             services.AddCors();
 
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
             services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
 

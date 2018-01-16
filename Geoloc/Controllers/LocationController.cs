@@ -13,10 +13,12 @@ namespace Geoloc.Controllers
     public class LocationController : Controller
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IAppUserRepository _appUserRepository;
 
-        public LocationController(ILocationRepository locationRepository)
+        public LocationController(ILocationRepository locationRepository, IAppUserRepository appUserRepository)
         {
             _locationRepository = locationRepository;
+            _appUserRepository = appUserRepository;
         }
 
         [HttpPost("[action]")]
@@ -26,7 +28,7 @@ namespace Geoloc.Controllers
                 return BadRequest();
             var model = new Location
             {
-                AppUser = new AppUser(),
+                AppUser = _appUserRepository.Get(webModel.UserId),
                 Latitude = webModel.Latitude,
                 Longitude = webModel.Longitude
             };
@@ -50,8 +52,9 @@ namespace Geoloc.Controllers
             {
                 Longitude = x.Longitude,
                 Latitude = x.Latitude,
+                Username = x.AppUser.Email,
                 Timestamp = DateTime.Now.ToFileTime(),
-
+                UserId = x.AppUser.Id
             });
             return new OkObjectResult(locationWebModels);
         }
