@@ -30,7 +30,8 @@ namespace Geoloc.Controllers
             {
                 AppUser = _appUserRepository.Get(webModel.UserId),
                 Latitude = webModel.Latitude,
-                Longitude = webModel.Longitude
+                Longitude = webModel.Longitude,
+                CreatedOn = DateTime.Now
             };
             _locationRepository.Add(model);
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
