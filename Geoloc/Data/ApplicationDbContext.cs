@@ -9,5 +9,9 @@ namespace Geoloc.Data
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<UsersInMeeting> UsersInMeetings { get; set; }
     }
 }

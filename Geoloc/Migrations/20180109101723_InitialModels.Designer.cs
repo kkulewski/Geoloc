@@ -11,9 +11,10 @@ using System;
 namespace Geoloc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180109101723_InitialModels")]
+    partial class InitialModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +62,7 @@ namespace Geoloc.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -85,8 +86,6 @@ namespace Geoloc.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AppUserId");
-
-                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<double>("Latitude");
 

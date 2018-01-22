@@ -60,7 +60,7 @@ namespace Geoloc.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");

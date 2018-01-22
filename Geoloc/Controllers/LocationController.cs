@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Geoloc.Data.Repositories;
 using Geoloc.Models;
-using Geoloc.Repository;
+using Geoloc.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,34 +12,53 @@ namespace Geoloc.Controllers
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
-        private readonly ILocationRepository _repo;
+        private readonly ILocationRepository _locationRepository;
+        private readonly IAppUserRepository _appUserRepository;
 
-        public LocationController(ILocationRepository repo)
+        public LocationController(ILocationRepository locationRepository, IAppUserRepository appUserRepository)
         {
-            _repo = repo;
+            _locationRepository = locationRepository;
+            _appUserRepository = appUserRepository;
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody]LocationModel model)
+        public IActionResult Send([FromBody]LocationWebModel webModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-
-            _repo.Add(model);
+            var model = new Location
+            {
+                AppUser = _appUserRepository.Get(webModel.UserId),
+                Latitude = webModel.Latitude,
+                Longitude = webModel.Longitude,
+                CreatedOn = DateTime.Now
+            };
+            _locationRepository.Add(model);
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
-        [HttpGet("[action]")]
-        public IEnumerable<LocationModel> Get()
+        [HttpGet("[action]/{userId}")]
+        public IEnumerable<Location> Get(string userId)
         {
-            return _repo.Get();
+            return _locationRepository.GetByUser(userId);
         }
 
         [HttpGet("get/last")]
         public IActionResult GetLastKnownLocations()
         {
-            var locations = _repo.Get().GroupBy(e => e.UserName).Select(e => e.FirstOrDefault());
-            return new OkObjectResult(JsonConvert.SerializeObject(locations));
+            var locations = _locationRepository.GetAllLocations()
+                .GroupBy(e => e.AppUser.Id)
+                .Select(x => x.OrderByDescending(c => c.CreatedOn).FirstOrDefault());
+
+            var locationWebModels = locations.Select(x => new LocationWebModel
+            {
+                Longitude = x.Longitude,
+                Latitude = x.Latitude,
+                Username = x.AppUser.Email,
+                Timestamp = DateTime.Now.ToFileTime(),
+                UserId = x.AppUser.Id
+            });
+            return new OkObjectResult(locationWebModels);
         }
     }
 }
