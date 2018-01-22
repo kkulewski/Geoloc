@@ -48,7 +48,8 @@ namespace Geoloc.Controllers
         {
             var locations = _locationRepository.GetAllLocations()
                 .GroupBy(e => e.AppUser.Id)
-                .Select(e => e.FirstOrDefault());
+                .Select(x => x.OrderByDescending(c => c.CreatedOn).FirstOrDefault());
+
             var locationWebModels = locations.Select(x => new LocationWebModel
             {
                 Longitude = x.Longitude,
