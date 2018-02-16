@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top geo-navbar">
+  <a class="navbar-brand" [routerLink]="['/']">
+    <div [ngClass]="{ 'geo-logo-logged': isUserLogged }">
+        Geoloc
+    </div>
+  </a>
+  <button class="navbar-toggler" type="button" (click)="toggleNavbar()" aria-controls="navbarsExampleDefault"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault" [ngbCollapse]="isNavbarCollapsed">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown" ngbDropdown>
+        <a class="nav-link dropdown-toggle" id="dropdown02" ngbDropdownToggle>Location</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown02" ngbDropdownMenu>
+          <a class="dropdown-item" [routerLink]="['/locate']">Locate</a>
+          <a class="dropdown-item" [routerLink]="['/last']">Last-known</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown" ngbDropdown *ngIf="!isUserLogged">
+        <a class="nav-link dropdown-toggle" id="dropdown01" ngbDropdownToggle>Account</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01" ngbDropdownMenu>
+          <a class="dropdown-item" [routerLink]="['/register']">Register</a>
+          <a class="dropdown-item" [routerLink]="['/login']">Login</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/map']">Map</a>
+      </li>      
+      <li class="nav-item" *ngIf="isUserLogged">
+        <a class="nav-link" (click)="logoutUser()">Logout</a>
+      </li>      
+    </ul>    
+    <span class="badge badge-success ml-auto">{{username}}</span>    
+  </div>
+</nav>
