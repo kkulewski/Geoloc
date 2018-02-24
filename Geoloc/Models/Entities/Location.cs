@@ -9,6 +9,7 @@ namespace Geoloc.Models.Entities
         public double Latitude { get; set; }
         public DateTime CreatedOn { get; set; }
 
+        public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }
 }

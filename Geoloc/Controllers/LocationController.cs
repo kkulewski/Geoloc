@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Geoloc.Data.Repositories;
-using Geoloc.Data.Repositories.Abstract;
+using AutoMapper;
 using Geoloc.Models;
-using Geoloc.Models.Entities;
+using Geoloc.Models.WebModels;
+using Geoloc.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,53 +12,42 @@ namespace Geoloc.Controllers
     [Route("api/[controller]")]
     public class LocationController : Controller
     {
-        private readonly ILocationRepository _locationRepository;
-        private readonly IAppUserRepository _appUserRepository;
+        private readonly ILocationService _locationService;
 
-        public LocationController(ILocationRepository locationRepository, IAppUserRepository appUserRepository)
+        public LocationController(ILocationService locationService)
         {
-            _locationRepository = locationRepository;
-            _appUserRepository = appUserRepository;
+            _locationService = locationService;
         }
 
         [HttpPost("[action]")]
         public IActionResult Send([FromBody]LocationWebModel webModel)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
-            var model = new Location
             {
-                AppUser = _appUserRepository.Get(webModel.UserId),
-                Latitude = webModel.Latitude,
-                Longitude = webModel.Longitude,
-                CreatedOn = DateTime.Now
-            };
-            _locationRepository.Add(model);
+                return BadRequest();
+            }
+
+            var model = Mapper.Map<LocationModel>(webModel);
+
+            _locationService.AddLocation(model);
+
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
         [HttpGet("[action]/{userId}")]
-        public IEnumerable<Location> Get(string userId)
+        public IEnumerable<LocationWebModel> Get(Guid userId)
         {
-            return _locationRepository.GetByUser(userId);
+            var model = _locationService.GetLocationByUserId(userId);
+            var result = Mapper.Map<IEnumerable<LocationWebModel>>(model);
+            return result;
         }
 
         [HttpGet("get/last")]
         public IActionResult GetLastKnownLocations()
         {
-            var locations = _locationRepository.GetAllLocations()
-                .GroupBy(e => e.AppUser.Id)
-                .Select(x => x.OrderByDescending(c => c.CreatedOn).FirstOrDefault());
-
-            var locationWebModels = locations.Select(x => new LocationWebModel
-            {
-                Longitude = x.Longitude,
-                Latitude = x.Latitude,
-                Username = x.AppUser.Email,
-                Timestamp = DateTime.Now.ToFileTime(),
-                UserId = x.AppUser.Id
-            });
-            return new OkObjectResult(locationWebModels);
+            var model = _locationService.GetLastKnownLocations();
+            var result = Mapper.Map<IEnumerable<LocationWebModel>>(model);
+            return new OkObjectResult(result);
         }
     }
 }

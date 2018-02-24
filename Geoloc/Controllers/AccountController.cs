@@ -120,7 +120,7 @@ namespace Geoloc.Controllers
                 return null;
             
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
-                return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id));
+                return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id.ToString()));
 
             // Credentials are invalid, or account doesn't exist
             return null;

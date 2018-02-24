@@ -2,10 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <StartupObject>Geoloc.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20171126222229_initial.cs" />
+    <Compile Remove="Migrations\20171126222229_initial.Designer.cs" />
+    <Compile Remove="Migrations\20180109101723_InitialModels.cs" />
+    <Compile Remove="Migrations\20180109101723_InitialModels.Designer.cs" />
+    <Compile Remove="Migrations\20180121205250_AddLocationCreatedOnDateTime.cs" />
+    <Compile Remove="Migrations\20180121205250_AddLocationCreatedOnDateTime.Designer.cs" />
+    <Compile Remove="Migrations\20180224091852_FriendsList.cs" />
+    <Compile Remove="Migrations\20180224091852_FriendsList.Designer.cs" />
+    <Compile Remove="Migrations\20180224092912_FriendsList.cs" />
+    <Compile Remove="Migrations\20180224092912_FriendsList.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
