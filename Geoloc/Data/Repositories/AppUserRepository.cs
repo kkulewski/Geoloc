@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models.Entities;
 
 namespace Geoloc.Data.Repositories

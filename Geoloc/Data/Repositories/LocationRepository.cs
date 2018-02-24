@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 

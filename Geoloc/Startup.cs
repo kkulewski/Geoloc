@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Data.Repositories;
+using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models.Entities;
 using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

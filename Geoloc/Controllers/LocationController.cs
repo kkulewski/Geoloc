@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Geoloc.Data.Repositories;
+using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models;
 using Geoloc.Models.Entities;
 using Microsoft.AspNetCore.Mvc;

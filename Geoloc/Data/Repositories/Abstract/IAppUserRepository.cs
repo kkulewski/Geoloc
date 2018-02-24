@@ -1,6 +1,6 @@
 ﻿using Geoloc.Models.Entities;
 
-namespace Geoloc.Data.Repositories
+namespace Geoloc.Data.Repositories.Abstract
 {
     public interface IAppUserRepository
     {
