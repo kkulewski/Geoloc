@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Geoloc.Models.Entities;
+using Geoloc.Data.Entities;
 
 namespace Geoloc.ViewModels.Mappings
 {

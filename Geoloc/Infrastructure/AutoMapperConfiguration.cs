@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Geoloc.Data.Entities;
 using Geoloc.Models;
-using Geoloc.Models.Entities;
 using Geoloc.Models.WebModels;
 
 namespace Geoloc.Infrastructure

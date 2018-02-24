@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Geoloc.Models.Entities;
+using Geoloc.Data.Entities;
 
 namespace Geoloc.Data.Repositories.Abstract
 {

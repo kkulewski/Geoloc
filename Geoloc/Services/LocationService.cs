@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models;
-using Geoloc.Models.Entities;
 using Geoloc.Services.Abstract;
 
 namespace Geoloc.Services

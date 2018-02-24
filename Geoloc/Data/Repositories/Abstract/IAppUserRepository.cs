@@ -1,5 +1,5 @@
 ﻿using System;
-using Geoloc.Models.Entities;
+using Geoloc.Data.Entities;
 
 namespace Geoloc.Data.Repositories.Abstract
 {

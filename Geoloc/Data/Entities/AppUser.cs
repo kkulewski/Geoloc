@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace Geoloc.Models.Entities
+namespace Geoloc.Data.Entities
 {
     public class AppUser : IdentityUser<Guid>
     {

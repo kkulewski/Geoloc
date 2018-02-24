@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Geoloc.Models.Entities
+namespace Geoloc.Data.Entities
 {
     public class Location
     {

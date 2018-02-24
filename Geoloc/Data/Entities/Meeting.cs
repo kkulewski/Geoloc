@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Geoloc.Models.Entities
+namespace Geoloc.Data.Entities
 {
     public class Meeting
     {

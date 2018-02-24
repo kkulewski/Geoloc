@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
-using Geoloc.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Geoloc.Data.Repositories

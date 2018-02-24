@@ -1,6 +1,7 @@
 ﻿using System;
+using Geoloc.Models;
 
-namespace Geoloc.Models.Entities
+namespace Geoloc.Data.Entities
 {
     public class UserRelation
     {

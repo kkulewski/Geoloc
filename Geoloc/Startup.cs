@@ -1,9 +1,9 @@
 ﻿using System;
 using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories;
 using Geoloc.Data.Repositories.Abstract;
-using Geoloc.Models.Entities;
 using Geoloc.Services;
 using Geoloc.Services.Abstract;
 using Geoloc.Services.Jwt;
