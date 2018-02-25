@@ -24,6 +24,9 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.UserId, o => o.MapFrom(s => s.AppUserId))
                 .ForMember(x => x.Timestamp, o => o.MapFrom(s => s.CreatedOn))
                 .ForMember(x => x.Username, o => o.MapFrom(s => s.AppUser.UserName));
+            
+            CreateMap<RegisterWebModel, AppUser>()
+                .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email));
         }
     }
 }

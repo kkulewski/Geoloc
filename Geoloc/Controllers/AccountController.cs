@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using AutoMapper;
 using Geoloc.Data;
-using Geoloc.ViewModels;
+using Geoloc.Models.WebModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
@@ -62,7 +62,7 @@ namespace Geoloc.Controllers
 
         // POST api/account/register
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody]RegisterViewModel model)
+        public async Task<IActionResult> Register([FromBody]RegisterWebModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -84,7 +84,7 @@ namespace Geoloc.Controllers
 
         // POST api/account/login
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel credentials)
+        public async Task<IActionResult> Login([FromBody]LoginWebModel credentials)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -1,6 +1,6 @@
-﻿namespace Geoloc.ViewModels
+﻿namespace Geoloc.Models.WebModels
 {
-    public class RegisterViewModel
+    public class RegisterWebModel
     {
         public string Email { get; set; }
         public string Password { get; set; }
