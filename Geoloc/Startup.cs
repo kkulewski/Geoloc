@@ -75,11 +75,6 @@ namespace Geoloc
                     };
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Member", policy => policy.RequireClaim("MembershipId"));
-            });
-
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("LocalDb"), b => b.MigrationsAssembly("Geoloc"));

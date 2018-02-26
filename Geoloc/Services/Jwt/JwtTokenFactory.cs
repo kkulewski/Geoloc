@@ -22,15 +22,6 @@ namespace Geoloc.Services.Jwt
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         }
 
-        public JwtTokenFactory(string issuer, string audience, string key, int expiryInMinutes, string subject)
-        {
-            _issuer = issuer;
-            _audience = audience;
-            _securityKey = GetSecurityKey(key);
-            _expiryInMinutes = expiryInMinutes;
-            _subject = subject;
-        }
-
         public JwtTokenFactory(IConfiguration config, string subject)
         {
             _issuer = config.GetSection("JwtTokens")["Issuer"];

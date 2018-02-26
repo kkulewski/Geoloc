@@ -32,24 +32,6 @@ namespace Geoloc.Controllers
             _appDbContext = appDbContext;
         }
 
-        // GET api/account/addclaim
-        [HttpGet]
-        public IActionResult AddClaim()
-        {
-            var token = new JwtTokenFactory(_configuration, "MemberToken")
-                .AddClaim("MembershipId", "123")
-                .Build();
-
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-        }
-
-        // GET api/account/checkclaim
-        [HttpGet]
-        public IActionResult CheckClaim()
-        {
-            return Ok(HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value));
-        }
-
         // POST api/account/username
         [HttpPost]
         public async Task<IActionResult> Username([FromBody]string id)
@@ -65,15 +47,18 @@ namespace Geoloc.Controllers
         public async Task<IActionResult> Register([FromBody]RegisterWebModel model)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var userIdentity = _mapper.Map<AppUser>(model);
-
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if (!result.Succeeded)
             {
                 foreach (var e in result.Errors)
+                {
                     ModelState.TryAddModelError(e.Code, e.Description);
+                }
 
                 return new BadRequestObjectResult(ModelState);
             }
@@ -87,7 +72,9 @@ namespace Geoloc.Controllers
         public async Task<IActionResult> Login([FromBody]LoginWebModel credentials)
         {
             if (!ModelState.IsValid)
+            {
                 return BadRequest(ModelState);
+            }
 
             var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
             if (identity == null)
@@ -97,7 +84,7 @@ namespace Geoloc.Controllers
             }
 
             var token = new JwtTokenFactory(_configuration, credentials.UserName)
-                .AddClaim(identity.FindFirst("rol"))
+                .AddClaim(identity.FindFirst("role"))
                 .AddClaim(identity.FindFirst("id"))
                 .Build();
 
@@ -113,14 +100,20 @@ namespace Geoloc.Controllers
         private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            {
                 return null;
+            }
             
             var userToVerify = await _userManager.FindByNameAsync(userName);
             if (userToVerify == null)
+            {
                 return null;
+            }
             
             if (await _userManager.CheckPasswordAsync(userToVerify, password))
+            {
                 return await Task.FromResult(GenerateClaimsIdentity(userName, userToVerify.Id.ToString()));
+            }
 
             // Credentials are invalid, or account doesn't exist
             return null;
@@ -132,7 +125,7 @@ namespace Geoloc.Controllers
             var claims = new[]
             {
                 new Claim("id", id),
-                new Claim("rol", "api_access")
+                new Claim("role", "api_access")
             };
 
             return new ClaimsIdentity(identity, claims);
