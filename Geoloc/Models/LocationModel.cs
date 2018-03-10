@@ -6,8 +6,7 @@ namespace Geoloc.Models
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string Username { get; set; }
-        public Guid UserId { get; set; }
+        public UserModel User { get; set; }
         public long Timestamp { get; set; }
     }
 }
