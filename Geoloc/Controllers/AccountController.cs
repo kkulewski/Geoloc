@@ -21,14 +21,12 @@ namespace Geoloc.Controllers
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IMapper _mapper;
 
         public AccountController(IConfiguration configuration, UserManager<AppUser> userManager,
-            ApplicationDbContext appDbContext, IMapper mapper)
+            ApplicationDbContext appDbContext)
         {
             _configuration = configuration;
             _userManager = userManager;
-            _mapper = mapper;
             _appDbContext = appDbContext;
         }
 
@@ -51,7 +49,7 @@ namespace Geoloc.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userIdentity = _mapper.Map<AppUser>(model);
+            var userIdentity = Mapper.Map<AppUser>(model);
             var result = await _userManager.CreateAsync(userIdentity, model.Password);
             if (!result.Succeeded)
             {
