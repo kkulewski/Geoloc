@@ -21,6 +21,15 @@ namespace Geoloc.Services
             _userRelationRepository = userRelationRepository;
         }
 
+        public void AddRelationRequest(UserRelationModel model)
+        {
+            var relation = Mapper.Map<UserRelation>(model);
+
+            // TODO: check if relation already exists to avoid duplicates
+            _userRelationRepository.Add(relation);
+            _unitOfWork.Save();
+        }
+
         public IEnumerable<UserRelationModel> GetUserRelations(Guid userId)
         {
             try
@@ -29,7 +38,8 @@ namespace Geoloc.Services
                     .GetUserRelationsByUser(userId)
                     .ToList()
                     .Where(x => x.InvitingUserId == userId ||
-                                x.InvitedUserId == userId && x.UserRelationStatus == UserRelationStatus.Friends);
+                                x.InvitedUserId == userId &&
+                                x.UserRelationStatus == UserRelationStatus.Accepted);
 
                 var result = Mapper.Map<IEnumerable<UserRelationModel>>(relations);
                 return result;
@@ -47,7 +57,8 @@ namespace Geoloc.Services
                 var relations = _userRelationRepository
                     .GetUserRelationsByUser(userId)
                     .ToList()
-                    .Where(x => x.InvitingUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Pending);
+                    .Where(x => x.InvitingUser.Id == userId &&
+                                x.UserRelationStatus == UserRelationStatus.Pending);
 
                 var result = Mapper.Map<IEnumerable<UserRelationModel>>(relations);
                 return result;
@@ -65,7 +76,8 @@ namespace Geoloc.Services
                 var relations = _userRelationRepository
                     .GetUserRelationsByUser(userId)
                     .ToList()
-                    .Where(x => x.InvitedUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Pending);
+                    .Where(x => x.InvitedUser.Id == userId &&
+                                x.UserRelationStatus == UserRelationStatus.Pending);
 
                 var result = Mapper.Map<IEnumerable<UserRelationModel>>(relations);
                 return result;

@@ -7,5 +7,6 @@ namespace Geoloc.Data.Repositories.Abstract
     public interface IUserRelationRepository
     {
         IEnumerable<UserRelation> GetUserRelationsByUser(Guid userId);
+        void Add(UserRelation model);
     }
 }

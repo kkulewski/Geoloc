@@ -3,7 +3,7 @@
     public enum UserRelationStatus
     {
         Pending,
-        Friends,
+        Accepted,
         Deleted
     }
 }
