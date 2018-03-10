@@ -1,5 +1,5 @@
 ﻿using System;
-using Geoloc.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Geoloc.Data.Entities
 {
@@ -10,7 +10,9 @@ namespace Geoloc.Data.Entities
         public Guid InvitedUserId { get; set; }
         public UserRelationStatus UserRelationStatus { get; set; }
             
+        [ForeignKey("InvitingUserId")]
         public AppUser InvitingUser { get; set; }
+        [ForeignKey("InvitedUserId")]
         public AppUser InvitedUser { get; set; }
     }
 }

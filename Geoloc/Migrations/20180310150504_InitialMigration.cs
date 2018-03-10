@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Geoloc.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace Geoloc.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,7 +59,7 @@ namespace Geoloc.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,8 +109,7 @@ namespace Geoloc.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     AppUserId = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     Latitude = table.Column<double>(nullable: false),
@@ -125,9 +124,8 @@ namespace Geoloc.Migrations
                 name: "Meetings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    LocationId = table.Column<int>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    LocationId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Time = table.Column<DateTime>(nullable: false)
                 },
@@ -139,7 +137,7 @@ namespace Geoloc.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,7 +153,7 @@ namespace Geoloc.Migrations
                     LastName = table.Column<string>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
-                    MeetingId = table.Column<int>(nullable: true),
+                    MeetingId = table.Column<Guid>(nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
@@ -180,35 +178,35 @@ namespace Geoloc.Migrations
                 name: "UserRelations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FirstAppUserId = table.Column<Guid>(nullable: false),
-                    SecondAppUserId = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    InvitedUserId = table.Column<Guid>(nullable: false),
+                    InvitingUserId = table.Column<Guid>(nullable: false),
                     UserRelationStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserRelations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserRelations_AspNetUsers_FirstAppUserId",
-                        column: x => x.FirstAppUserId,
+                        name: "FK_UserRelations_AspNetUsers_InvitedUserId",
+                        column: x => x.InvitedUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_UserRelations_AspNetUsers_SecondAppUserId",
-                        column: x => x.SecondAppUserId,
+                        name: "FK_UserRelations_AspNetUsers_InvitingUserId",
+                        column: x => x.InvitingUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UsersInMeetings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     AppUserId = table.Column<Guid>(nullable: false),
-                    MeetingId = table.Column<int>(nullable: false)
+                    MeetingId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,13 +216,13 @@ namespace Geoloc.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UsersInMeetings_Meetings_MeetingId",
                         column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -282,14 +280,14 @@ namespace Geoloc.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRelations_FirstAppUserId",
-                table: "UserRelations",
-                column: "InvitingUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRelations_SecondAppUserId",
+                name: "IX_UserRelations_InvitedUserId",
                 table: "UserRelations",
                 column: "InvitedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRelations_InvitingUserId",
+                table: "UserRelations",
+                column: "InvitingUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersInMeetings_AppUserId",
