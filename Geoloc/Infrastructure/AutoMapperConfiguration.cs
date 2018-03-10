@@ -31,8 +31,8 @@ namespace Geoloc.Infrastructure
 
             CreateMap<UserRelation, UserRelationWebModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.Email))
-                .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.Email))
+                .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.UserName))
+                .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.UserName))
                 .ForMember(x => x.Status, o => o.MapFrom(s => s.UserRelationStatus))
                 .ForAllOtherMembers(o => o.Ignore());
         }
