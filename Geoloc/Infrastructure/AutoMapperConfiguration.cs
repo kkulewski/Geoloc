@@ -28,6 +28,12 @@ namespace Geoloc.Infrastructure
             CreateMap<RegisterWebModel, AppUser>()
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email))
                 .ForAllOtherMembers(o => o.Ignore());
+
+            CreateMap<UserRelation, UserRelationWebModel>()
+                .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.Email))
+                .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.Email))
+                .ForMember(x => x.Status, o => o.MapFrom(s => s.UserRelationStatus))
+                .ForAllOtherMembers(o => o.Ignore());
         }
     }
 }

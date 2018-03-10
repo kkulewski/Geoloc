@@ -38,6 +38,7 @@ namespace Geoloc
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<IUserRelationRepository, UserRelationRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
