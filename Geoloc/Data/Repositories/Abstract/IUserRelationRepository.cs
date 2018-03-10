@@ -6,10 +6,6 @@ namespace Geoloc.Data.Repositories.Abstract
 {
     public interface IUserRelationRepository
     {
-        IEnumerable<UserRelation> GetUserRelations(Guid userId);
-
-        IEnumerable<UserRelation> GetUserSentRequests(Guid userId);
-
-        IEnumerable<UserRelation> GetUserReceivedRequests(Guid userId);
+        IEnumerable<UserRelation> GetUserRelationsByUser(Guid userId);
     }
 }

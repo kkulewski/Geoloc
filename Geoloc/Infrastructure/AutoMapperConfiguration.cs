@@ -9,6 +9,17 @@ namespace Geoloc.Infrastructure
     {
         public AutoMapperConfiguration()
         {
+            #region REGISTER
+
+            CreateMap<RegisterWebModel, AppUser>()
+                .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email))
+                .ForMember(x => x.Email, o => o.MapFrom(s => s.Email))
+                .ForAllOtherMembers(o => o.Ignore());
+
+            #endregion
+
+            #region LOCATION
+
             CreateMap<LocationWebModel, LocationModel>()
                 .ForMember(x => x.Timestamp, o => o.Ignore());
 
@@ -21,19 +32,25 @@ namespace Geoloc.Infrastructure
             CreateMap<LocationModel, LocationWebModel>();
 
             CreateMap<Location, LocationModel>()
-            
-            CreateMap<RegisterWebModel, AppUser>()
-                .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email))
-                .ForAllOtherMembers(o => o.Ignore());
                 .ForMember(x => x.User, o => o.MapFrom(s => s.AppUser))
                 .ForMember(x => x.Timestamp, o => o.MapFrom(s => s.CreatedOn));
 
-            CreateMap<UserRelation, UserRelationWebModel>()
+            #endregion
+
+            #region USER_RELATION
+
+            CreateMap<UserRelationWebModel, UserRelationModel>();
+
+            CreateMap<UserRelation, UserRelationModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.UserName))
-                .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.UserName))
-                .ForMember(x => x.Status, o => o.MapFrom(s => s.UserRelationStatus))
+                .ForMember(x => x.InvitingUserId, o => o.MapFrom(s => s.InvitingUser.Id))
+                .ForMember(x => x.InvitedUserId, o => o.MapFrom(s => s.InvitedUser.Id))
+                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus))
                 .ForAllOtherMembers(o => o.Ignore());
+
+            CreateMap<UserRelationModel, UserRelationWebModel>();
+
+            #endregion
         }
     }
 }

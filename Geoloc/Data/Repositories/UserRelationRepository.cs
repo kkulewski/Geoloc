@@ -15,28 +15,13 @@ namespace Geoloc.Data.Repositories
         {
             _context = context;
         }
-        public IEnumerable<UserRelation> GetUserRelations(Guid userId)
-        {
-            return _context.UserRelations
-                .Include(x => x.InvitingUser)
-                .Include(x => x.InvitedUser)
-                .Where(x => x.InvitingUserId == userId || x.InvitedUserId == userId && x.UserRelationStatus == UserRelationStatus.Friends);
-        }
 
-        public IEnumerable<UserRelation> GetUserSentRequests(Guid userId)
+        public IEnumerable<UserRelation> GetUserRelationsByUser(Guid userId)
         {
             return _context.UserRelations
                 .Include(x => x.InvitingUser)
                 .Include(x => x.InvitedUser)
-                .Where(x => x.InvitingUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Pending);
-        }
-
-        public IEnumerable<UserRelation> GetUserReceivedRequests(Guid userId)
-        {
-            return _context.UserRelations
-                .Include(x => x.InvitingUser)
-                .Include(x => x.InvitedUser)
-                .Where(x => x.InvitedUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Pending);
+                .Where(x => x.InvitingUserId == userId || x.InvitedUserId == userId);
         }
     }
 }

@@ -13,17 +13,17 @@ namespace Geoloc.Controllers
     [Route("api/[controller]")]
     public class UserRelationController : Controller
     {
-        private readonly IUserRelationRepository _userRelationRepository;
+        private readonly IUserRelationService _userRelationService;
 
-        public UserRelationController(IUserRelationRepository userRelationRepository)
+        public UserRelationController(IUserRelationService userRelationService)
         {
-            _userRelationRepository = userRelationRepository;
+            _userRelationService = userRelationService;
         }
 
         [HttpGet("{userId}")]
         public IEnumerable<UserRelationWebModel> Relations(Guid userId)
         {
-            var model = _userRelationRepository.GetUserRelations(userId);
+            var model = _userRelationService.GetUserRelations(userId);
             var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
             return result;
         }
@@ -31,7 +31,7 @@ namespace Geoloc.Controllers
         [HttpGet("sent/{userId}")]
         public IEnumerable<UserRelationWebModel> GetSentRequests(Guid userId)
         {
-            var model = _userRelationRepository.GetUserSentRequests(userId);
+            var model = _userRelationService.GetUserSentRequests(userId);
             var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
             return result;
         }
@@ -39,7 +39,7 @@ namespace Geoloc.Controllers
         [HttpGet("received/{userId}")]
         public IEnumerable<UserRelationWebModel> GetReceivedRelations(Guid userId)
         {
-            var model = _userRelationRepository.GetUserReceivedRequests(userId);
+            var model = _userRelationService.GetUserReceivedRequests(userId);
             var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
             return result;
         }
