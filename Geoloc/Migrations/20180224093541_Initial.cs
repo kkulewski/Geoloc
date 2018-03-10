@@ -284,12 +284,12 @@ namespace Geoloc.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserRelations_FirstAppUserId",
                 table: "UserRelations",
-                column: "FirstAppUserId");
+                column: "InvitingUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRelations_SecondAppUserId",
                 table: "UserRelations",
-                column: "SecondAppUserId");
+                column: "InvitedUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersInMeetings_AppUserId",

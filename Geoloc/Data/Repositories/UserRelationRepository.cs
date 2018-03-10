@@ -16,7 +16,7 @@ namespace Geoloc.Data.Repositories
         }
         public IEnumerable<UserRelation> GetGivenUserRelations(Guid userId)
         {
-            return _context.UserRelations.Where(x => x.FirstAppUserId == userId || x.SecondAppUserId == userId);
+            return _context.UserRelations.Where(x => x.InvitingUserId == userId || x.InvitedUserId == userId);
         }
     }
 }

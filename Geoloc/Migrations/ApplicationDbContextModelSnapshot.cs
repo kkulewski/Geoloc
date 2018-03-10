@@ -123,17 +123,17 @@ namespace Geoloc.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("FirstAppUserId");
+                    b.Property<Guid>("InvitingUserId");
 
-                    b.Property<Guid>("SecondAppUserId");
+                    b.Property<Guid>("InvitedUserId");
 
                     b.Property<int>("UserRelationStatus");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FirstAppUserId");
+                    b.HasIndex("InvitingUserId");
 
-                    b.HasIndex("SecondAppUserId");
+                    b.HasIndex("InvitedUserId");
 
                     b.ToTable("UserRelations");
                 });
@@ -286,14 +286,14 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Geoloc.Models.Entities.UserRelation", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser", "FirstAppUser")
+                    b.HasOne("Geoloc.Models.Entities.AppUser", "InvitingUser")
                         .WithMany()
-                        .HasForeignKey("FirstAppUserId")
+                        .HasForeignKey("InvitingUserId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Geoloc.Models.Entities.AppUser", "SecondAppUser")
+                    b.HasOne("Geoloc.Models.Entities.AppUser", "InvitedUser")
                         .WithMany()
-                        .HasForeignKey("SecondAppUserId")
+                        .HasForeignKey("InvitedUserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -5,12 +5,12 @@ namespace Geoloc.Data.Entities
 {
     public class UserRelation
     {
-        public int Id { get; set; }
-        public Guid FirstAppUserId { get; set; }
-        public Guid SecondAppUserId { get; set; }
+        public Guid Id { get; set; }
+        public Guid InvitingUserId { get; set; }
+        public Guid InvitedUserId { get; set; }
         public UserRelationStatus UserRelationStatus { get; set; }
             
-        public AppUser FirstAppUser { get; set; }
-        public AppUser SecondAppUser { get; set; }
+        public AppUser InvitingUser { get; set; }
+        public AppUser InvitedUser { get; set; }
     }
 }
