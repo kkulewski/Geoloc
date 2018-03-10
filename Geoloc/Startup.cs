@@ -35,11 +35,17 @@ namespace Geoloc
             services.AddAutoMapper();
             services.AddCors();
 
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAppUserRepository, AppUserRepository>();
+
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<ILocationRepository, LocationRepository>();
-            services.AddScoped<IAppUserRepository, AppUserRepository>();
+
+            services.AddScoped<IUserRelationService, UserRelationService>();
             services.AddScoped<IUserRelationRepository, UserRelationRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             services.AddIdentity<AppUser, UserRole>()

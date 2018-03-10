@@ -9,7 +9,7 @@ namespace Geoloc.Infrastructure
     {
         public AutoMapperConfiguration()
         {
-            #region REGISTER
+            #region User
 
             CreateMap<RegisterWebModel, AppUser>()
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email))
@@ -18,10 +18,7 @@ namespace Geoloc.Infrastructure
 
             #endregion
 
-            #region LOCATION
-
-            CreateMap<LocationWebModel, LocationModel>()
-                .ForMember(x => x.Timestamp, o => o.Ignore());
+            #region Location
 
             CreateMap<LocationModel, Location>()
                 .ForMember(x => x.Id, o => o.Ignore())
@@ -29,26 +26,32 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.AppUserId, o => o.MapFrom(s => s.User.Id))
                 .ForMember(x => x.CreatedOn, o => o.MapFrom(s => s.Timestamp));
 
-            CreateMap<LocationModel, LocationWebModel>();
-
             CreateMap<Location, LocationModel>()
                 .ForMember(x => x.User, o => o.MapFrom(s => s.AppUser))
                 .ForMember(x => x.Timestamp, o => o.MapFrom(s => s.CreatedOn));
 
+            CreateMap<LocationModel, LocationWebModel>()
+                .ForMember(x => x.Latitude, o => o.MapFrom(s => s.Latitude))
+                .ForMember(x => x.Longitude, o => o.MapFrom(s => s.Longitude))
+                .ForMember(x => x.UserId, o => o.MapFrom(s => s.User.Id))
+                .ForMember(x => x.Username, o => o.MapFrom(s => s.User.UserName));
+
             #endregion
 
-            #region USER_RELATION
-
-            CreateMap<UserRelationWebModel, UserRelationModel>();
+            #region UserRelation
 
             CreateMap<UserRelation, UserRelationModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.InvitingUserId, o => o.MapFrom(s => s.InvitingUser.Id))
-                .ForMember(x => x.InvitedUserId, o => o.MapFrom(s => s.InvitedUser.Id))
+                .ForMember(x => x.InvitingUser, o => o.MapFrom(s => s.InvitingUser))
+                .ForMember(x => x.InvitedUser, o => o.MapFrom(s => s.InvitedUser))
                 .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus))
                 .ForAllOtherMembers(o => o.Ignore());
 
-            CreateMap<UserRelationModel, UserRelationWebModel>();
+            CreateMap<UserRelationModel, UserRelationWebModel>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(x => x.InvitingUserId, o => o.MapFrom(s => s.InvitingUser.Id))
+                .ForMember(x => x.InvitedUserId, o => o.MapFrom(s => s.InvitedUser.Id))
+                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus));
 
             #endregion
         }

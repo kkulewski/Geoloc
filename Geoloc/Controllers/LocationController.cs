@@ -13,10 +13,12 @@ namespace Geoloc.Controllers
     public class LocationController : Controller
     {
         private readonly ILocationService _locationService;
+        private readonly IUserService _userService;
 
-        public LocationController(ILocationService locationService)
+        public LocationController(ILocationService locationService, IUserService userService)
         {
             _locationService = locationService;
+            _userService = userService;
         }
 
         [HttpPost("[action]")]
@@ -27,10 +29,15 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
 
-            var model = Mapper.Map<LocationModel>(webModel);
+            var model = new LocationModel
+            {
+                Latitude = webModel.Latitude,
+                Longitude = webModel.Longitude,
+                Timestamp = webModel.Timestamp,
+                User = _userService.GetById(webModel.UserId)
+            };
 
             _locationService.AddLocation(model);
-
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 
