@@ -20,13 +20,19 @@ namespace Geoloc.Services
             _unitOfWork = unitOfWork;
             _locationRepository = locationRepository;
         }
-
-        //Requires further error checking
+        
         public void AddLocation(LocationModel model)
         {
-            var location = Mapper.Map<Location>(model);
-            _locationRepository.Add(location);
-            _unitOfWork.Save();
+            try
+            {
+                var location = Mapper.Map<Location>(model);
+                _locationRepository.Add(location);
+                _unitOfWork.Save();
+            }
+            catch (Exception)
+            {
+                // TODO: error handling
+            }
         }
 
         public IEnumerable<LocationModel> GetLocationByUserId(Guid userId)
