@@ -24,9 +24,22 @@ namespace Geoloc.Data.Repositories
                 .Where(x => x.InvitingUserId == userId || x.InvitedUserId == userId);
         }
 
+        public UserRelation GetUserRelationById(Guid relationId)
+        {
+            return _context.UserRelations
+                .Include(x => x.InvitingUser)
+                .Include(x => x.InvitedUser)
+                .FirstOrDefault(x => x.Id == relationId);
+        }
+
         public void Add(UserRelation model)
         {
             _context.UserRelations.Add(model);
+        }
+
+        public void Update(UserRelation model)
+        {
+            _context.UserRelations.Update(model);
         }
     }
 }
