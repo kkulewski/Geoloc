@@ -25,7 +25,18 @@ namespace Geoloc.Services
         {
             try
             {
-                // TODO: check if relation already exists to avoid duplicates
+                var userId = model.InvitingUser.Id;
+                var userRelations = _userRelationRepository.GetUserRelationsByUser(userId);
+
+                var relationExists = userRelations.Any(x =>
+                    x.InvitingUser.Id == userId && x.InvitedUser.Id == model.InvitedUser.Id ||
+                    x.InvitedUser.Id == userId && x.InvitingUser.Id == model.InvitedUser.Id);
+
+                if (relationExists)
+                {
+                    return false;
+                }
+
                 var relation = Mapper.Map<UserRelation>(model);
                 _userRelationRepository.Add(relation);
                 _unitOfWork.Save();
