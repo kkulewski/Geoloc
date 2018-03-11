@@ -72,9 +72,8 @@ namespace Geoloc.Services
                 var relations = _userRelationRepository
                     .GetUserRelationsByUser(userId)
                     .ToList()
-                    .Where(x => x.InvitingUserId == userId ||
-                                x.InvitedUserId == userId &&
-                                x.UserRelationStatus == UserRelationStatus.Accepted);
+                    .Where(x => (x.InvitingUserId == userId && x.UserRelationStatus == UserRelationStatus.Accepted) ||
+                                (x.InvitedUserId == userId && x.UserRelationStatus == UserRelationStatus.Accepted));
 
                 var result = Mapper.Map<IEnumerable<UserRelationModel>>(relations);
                 return result;
