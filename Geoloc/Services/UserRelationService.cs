@@ -23,11 +23,32 @@ namespace Geoloc.Services
 
         public void AddRelationRequest(UserRelationModel model)
         {
-            var relation = Mapper.Map<UserRelation>(model);
-
             // TODO: check if relation already exists to avoid duplicates
+            var relation = Mapper.Map<UserRelation>(model);
             _userRelationRepository.Add(relation);
             _unitOfWork.Save();
+        }
+
+        public void AcceptRelationRequest(Guid relationId)
+        {
+            var relation = _userRelationRepository.GetUserRelationById(relationId);
+            relation.UserRelationStatus = UserRelationStatus.Accepted;
+            _userRelationRepository.Update(relation);
+            _unitOfWork.Save();
+        }
+
+        public UserRelationModel GetUserRelationById(Guid relationId)
+        {
+            try
+            {
+                var relation = _userRelationRepository.GetUserRelationById(relationId);
+                var result = Mapper.Map<UserRelationModel>(relation);
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public IEnumerable<UserRelationModel> GetUserRelations(Guid userId)

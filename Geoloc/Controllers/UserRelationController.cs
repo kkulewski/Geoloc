@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Geoloc.Data.Entities;
-using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models;
 using Geoloc.Models.WebModels;
 using Geoloc.Services.Abstract;
@@ -64,6 +63,19 @@ namespace Geoloc.Controllers
 
             _userRelationService.AddRelationRequest(model);
             return new OkObjectResult(JsonConvert.SerializeObject("Relation request sent."));
+        }
+
+        [HttpPost("[action]")]
+        public IActionResult Accept([FromBody] Guid id)
+        {
+            var model = _userRelationService.GetUserRelationById(id);
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            
+            _userRelationService.AcceptRelationRequest(id);
+            return new OkObjectResult(JsonConvert.SerializeObject("Relation request accepted."));
         }
     }
 }

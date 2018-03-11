@@ -8,6 +8,10 @@ namespace Geoloc.Services.Abstract
     {
         void AddRelationRequest(UserRelationModel model);
 
+        void AcceptRelationRequest(Guid relationId);
+
+        UserRelationModel GetUserRelationById(Guid relationId);
+
         IEnumerable<UserRelationModel> GetUserRelations(Guid userId);
 
         IEnumerable<UserRelationModel> GetUserSentRequests(Guid userId);
