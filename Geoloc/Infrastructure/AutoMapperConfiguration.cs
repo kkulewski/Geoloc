@@ -51,7 +51,9 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.InvitingUserId, o => o.MapFrom(s => s.InvitingUser.Id))
                 .ForMember(x => x.InvitedUserId, o => o.MapFrom(s => s.InvitedUser.Id))
-                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus));
+                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus))
+                .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.UserName))
+                .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.UserName));
 
             #endregion
         }

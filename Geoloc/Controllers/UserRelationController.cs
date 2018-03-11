@@ -57,8 +57,8 @@ namespace Geoloc.Controllers
             var model = new UserRelationModel
             {
                 UserRelationStatus = UserRelationStatus.Pending,
-                InvitingUser = _userService.GetById(webModel.InvitingUserId),
-                InvitedUser = _userService.GetById(webModel.InvitedUserId)
+                InvitingUser = _userService.GetByUserName(webModel.InvitingUserName),
+                InvitedUser = _userService.GetByUserName(webModel.InvitedUserName)
             };
 
             _userRelationService.AddRelationRequest(model);

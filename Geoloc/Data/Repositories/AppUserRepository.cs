@@ -20,6 +20,11 @@ namespace Geoloc.Data.Repositories
             return _context.Users.SingleOrDefault(user => user.Id == id);
         }
 
+        public AppUser Get(string userName)
+        {
+            return _context.Users.SingleOrDefault(user => user.UserName == userName);
+        }
+
         public IEnumerable<AppUser> GetAll()
         {
             return _context.Users;

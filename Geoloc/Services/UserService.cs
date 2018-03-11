@@ -21,5 +21,12 @@ namespace Geoloc.Services
             var result = Mapper.Map<UserModel>(user);
             return result;
         }
+
+        public UserModel GetByUserName(string userName)
+        {
+            var user = _appUserRepository.Get(userName);
+            var result = Mapper.Map<UserModel>(user);
+            return result;
+        }
     }
 }
