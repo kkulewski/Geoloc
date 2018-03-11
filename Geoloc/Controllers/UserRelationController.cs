@@ -61,7 +61,12 @@ namespace Geoloc.Controllers
                 InvitedUser = _userService.GetByUserName(webModel.InvitedUserName)
             };
 
-            _userRelationService.AddRelationRequest(model);
+            var isSuccess = _userRelationService.SendRelationRequest(model);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+
             return new OkObjectResult(JsonConvert.SerializeObject("Relation request sent."));
         }
 
@@ -74,7 +79,12 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
             
-            _userRelationService.AcceptRelationRequest(id);
+            var isSuccess = _userRelationService.AcceptRelationRequest(id);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+
             return new OkObjectResult(JsonConvert.SerializeObject("Relation request accepted."));
         }
     }

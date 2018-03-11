@@ -6,9 +6,9 @@ namespace Geoloc.Services.Abstract
 {
     public interface IUserRelationService
     {
-        void AddRelationRequest(UserRelationModel model);
+        bool SendRelationRequest(UserRelationModel model);
 
-        void AcceptRelationRequest(Guid relationId);
+        bool AcceptRelationRequest(Guid relationId);
 
         UserRelationModel GetUserRelationById(Guid relationId);
 

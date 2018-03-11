@@ -37,7 +37,12 @@ namespace Geoloc.Controllers
                 User = _userService.GetById(webModel.UserId)
             };
 
-            _locationService.AddLocation(model);
+            var isSuccess = _locationService.AddLocation(model);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+
             return new OkObjectResult(JsonConvert.SerializeObject("Location added"));
         }
 

@@ -21,7 +21,7 @@ namespace Geoloc.Services
             _userRelationRepository = userRelationRepository;
         }
 
-        public void AddRelationRequest(UserRelationModel model)
+        public bool SendRelationRequest(UserRelationModel model)
         {
             try
             {
@@ -29,14 +29,16 @@ namespace Geoloc.Services
                 var relation = Mapper.Map<UserRelation>(model);
                 _userRelationRepository.Add(relation);
                 _unitOfWork.Save();
+                return true;
             }
             catch (Exception)
             {
                 // TODO: error handling
+                return false;
             }
         }
 
-        public void AcceptRelationRequest(Guid relationId)
+        public bool AcceptRelationRequest(Guid relationId)
         {
             try
             {
@@ -44,10 +46,12 @@ namespace Geoloc.Services
                 relation.UserRelationStatus = UserRelationStatus.Accepted;
                 _userRelationRepository.Update(relation);
                 _unitOfWork.Save();
+                return true;
             }
             catch (Exception)
             {
                 // TODO: error handling
+                return false;
             }
         }
 

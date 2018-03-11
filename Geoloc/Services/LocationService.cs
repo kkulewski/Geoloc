@@ -21,17 +21,19 @@ namespace Geoloc.Services
             _locationRepository = locationRepository;
         }
         
-        public void AddLocation(LocationModel model)
+        public bool AddLocation(LocationModel model)
         {
             try
             {
                 var location = Mapper.Map<Location>(model);
                 _locationRepository.Add(location);
                 _unitOfWork.Save();
+                return true;
             }
             catch (Exception)
             {
                 // TODO: error handling
+                return false;
             }
         }
 
