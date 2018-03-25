@@ -19,7 +19,6 @@ namespace Geoloc.Data.Repositories
         {
             return _context.Meetings
                 .Include(x => x.Location)
-                .Include(x => x.ParticipantUsers)
                 .FirstOrDefault(x => x.Id == id);
         }
 
