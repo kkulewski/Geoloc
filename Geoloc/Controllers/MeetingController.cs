@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Geoloc.Models;
@@ -15,11 +14,13 @@ namespace Geoloc.Controllers
     {
         private readonly IMeetingService _meetingService;
         private readonly ILocationService _locationService;
+        private readonly IUserService _userService;
 
-        public MeetingController(IMeetingService meetingService, ILocationService locationService)
+        public MeetingController(IMeetingService meetingService, ILocationService locationService, IUserService userService)
         {
             _meetingService = meetingService;
             _locationService = locationService;
+            _userService = userService;
         }
 
         [HttpGet("[action]/{meetingId}")]
@@ -31,7 +32,7 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Add([FromBody]MeetingWebModel webModel)
+        public IActionResult Send([FromBody]MeetingWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
@@ -40,11 +41,12 @@ namespace Geoloc.Controllers
 
             var model = new MeetingModel
             {
-                // TODO: handle location and time input
+                // TODO: handle location, user and time inputs
                 Name = webModel.Name,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now + TimeSpan.FromHours(1),
-                Location = _locationService.GetLastKnownLocations().FirstOrDefault()
+                Location = _locationService.GetLastKnownLocations().FirstOrDefault(),
+                User = _userService.GetAllUsers().FirstOrDefault()
             };
 
             var isSuccess = _meetingService.AddMeeting(model);

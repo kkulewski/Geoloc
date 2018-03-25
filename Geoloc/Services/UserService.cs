@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Models;
@@ -26,6 +27,13 @@ namespace Geoloc.Services
         {
             var user = _appUserRepository.Get(userName);
             var result = Mapper.Map<UserModel>(user);
+            return result;
+        }
+
+        public IEnumerable<UserModel> GetAllUsers()
+        {
+            var users = _appUserRepository.GetAll();
+            var result = Mapper.Map<IEnumerable<UserModel>>(users);
             return result;
         }
     }

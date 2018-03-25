@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Geoloc.Models;
 
 namespace Geoloc.Services.Abstract
@@ -7,5 +8,6 @@ namespace Geoloc.Services.Abstract
     {
         UserModel GetById(Guid userId);
         UserModel GetByUserName(string userName);
+        IEnumerable<UserModel> GetAllUsers();
     }
 }
