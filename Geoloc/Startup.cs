@@ -63,7 +63,8 @@ namespace Geoloc
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-            services.AddAuthentication(options =>
+            services
+                .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 })

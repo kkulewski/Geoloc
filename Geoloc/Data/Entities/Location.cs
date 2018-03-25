@@ -8,7 +8,6 @@ namespace Geoloc.Data.Entities
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public DateTime CreatedOn { get; set; }
-
         public Guid AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }
