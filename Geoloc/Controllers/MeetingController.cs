@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Geoloc.Models;
@@ -23,7 +24,15 @@ namespace Geoloc.Controllers
             _userService = userService;
         }
 
-        [HttpGet("[action]/{meetingId}")]
+        [HttpGet]
+        public IEnumerable<MeetingWebModel> Get()
+        {
+            var model = _meetingService.GetAllMeetings();
+            var result = Mapper.Map<IEnumerable<MeetingWebModel>>(model);
+            return result;
+        }
+
+        [HttpGet("{meetingId}")]
         public MeetingWebModel Get(Guid meetingId)
         {
             var model = _meetingService.GetById(meetingId);

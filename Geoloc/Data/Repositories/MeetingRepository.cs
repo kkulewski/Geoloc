@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
@@ -26,6 +27,11 @@ namespace Geoloc.Data.Repositories
         public void Add(Meeting model)
         {
             _context.Meetings.Add(model);
+        }
+
+        public IEnumerable<Meeting> GetAll()
+        {
+            return _context.Meetings;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Geoloc.Data.Entities;
 
 namespace Geoloc.Data.Repositories.Abstract
@@ -7,5 +8,6 @@ namespace Geoloc.Data.Repositories.Abstract
     {
         Meeting Get(Guid id);
         void Add(Meeting model);
+        IEnumerable<Meeting> GetAll();
     }
 }

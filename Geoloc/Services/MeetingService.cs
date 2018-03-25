@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Data.Entities;
@@ -47,6 +48,13 @@ namespace Geoloc.Services
                 // TODO: error handling
                 return false;
             }
+        }
+
+        public IEnumerable<MeetingModel> GetAllMeetings()
+        {
+            var meetings = _meetingRepository.GetAll();
+            var result = Mapper.Map<IEnumerable<MeetingModel>>(meetings);
+            return result;
         }
     }
 }
