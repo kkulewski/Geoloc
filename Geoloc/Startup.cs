@@ -50,6 +50,8 @@ namespace Geoloc
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
 
+            services.AddScoped<IAuthService, AuthService>();
+
             services.AddIdentity<AppUser, UserRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddUserStore<UserStore<AppUser, UserRole, ApplicationDbContext, Guid>>()
