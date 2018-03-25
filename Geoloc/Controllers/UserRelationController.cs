@@ -54,11 +54,23 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
 
+            var invitingUser = _userService.GetByUserName(webModel.InvitingUserName);
+            if (invitingUser == null)
+            {
+                return BadRequest();
+            }
+
+            var invitedUser = _userService.GetByUserName(webModel.InvitedUserName);
+            if (invitedUser == null)
+            {
+                return BadRequest();
+            }
+
             var model = new UserRelationModel
             {
                 UserRelationStatus = UserRelationStatus.Pending,
-                InvitingUser = _userService.GetByUserName(webModel.InvitingUserName),
-                InvitedUser = _userService.GetByUserName(webModel.InvitedUserName)
+                InvitingUser = invitingUser,
+                InvitedUser = invitedUser
             };
 
             var isSuccess = _userRelationService.SendRelationRequest(model);

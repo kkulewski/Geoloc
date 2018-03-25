@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using Geoloc.Models;
 using Geoloc.Models.WebModels;
@@ -48,14 +47,26 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
 
+            var location = _locationService.GetById(webModel.LocationId);
+            if (location == null)
+            {
+                return BadRequest();
+            }
+
+            var user = _userService.GetById(webModel.UserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             var model = new MeetingModel
             {
-                // TODO: handle location, user and time inputs
+                // TODO: handle time inputs
                 Name = webModel.Name,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now + TimeSpan.FromHours(1),
-                Location = _locationService.GetById(webModel.LocationId),
-                User = _userService.GetById(webModel.UserId)
+                Location = location,
+                User = user
             };
 
             var isSuccess = _meetingService.AddMeeting(model);
