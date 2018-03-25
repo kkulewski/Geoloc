@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Geoloc.Data.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class MeetingRepository : IMeetingRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public EventRepository(ApplicationDbContext context)
+        public MeetingRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public Event Get(Guid id)
+        public Meeting Get(Guid id)
         {
-            return _context.Events
+            return _context.Meetings
                 .Include(x => x.Location)
                 .Include(x => x.ParticipantUsers)
                 .FirstOrDefault(x => x.Id == id);
         }
 
-        public void Add(Event model)
+        public void Add(Meeting model)
         {
-            _context.Events.Add(model);
+            _context.Meetings.Add(model);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Geoloc.Infrastructure
 
             #endregion
 
-            #region Event
+            #region Meeting
 
 
 

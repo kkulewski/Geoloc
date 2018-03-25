@@ -3,9 +3,9 @@ using Geoloc.Data.Entities;
 
 namespace Geoloc.Data.Repositories.Abstract
 {
-    public interface IEventRepository
+    public interface IMeetingRepository
     {
-        Event Get(Guid id);
-        void Add(Event model);
+        Meeting Get(Guid id);
+        void Add(Meeting model);
     }
 }

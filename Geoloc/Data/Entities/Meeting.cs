@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Geoloc.Data.Entities
 {
-    public class Event
+    public class Meeting
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
