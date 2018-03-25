@@ -11,5 +11,7 @@ namespace Geoloc.Data.Entities
         public DateTime EndTime { get; set; }
         public Guid LocationId { get; set; }
         public Location Location { get; set; }
+        public Guid AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }
