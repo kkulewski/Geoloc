@@ -21,7 +21,16 @@ namespace Geoloc.Services
 
         public MeetingModel GetById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var relation = _meetingRepository.Get(id);
+                var result = Mapper.Map<MeetingModel>(relation);
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public bool AddMeeting(MeetingModel model)

@@ -9,7 +9,6 @@ namespace Geoloc.Models
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public List<UserModel> ParticipantUsers { get; set; }
         public LocationModel Location { get; set; }
     }
 }

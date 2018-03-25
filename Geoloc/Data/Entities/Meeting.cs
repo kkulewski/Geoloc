@@ -10,7 +10,6 @@ namespace Geoloc.Data.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public Guid LocationId { get; set; }
-        public List<AppUser> ParticipantUsers { get; set; }
         public Location Location { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Geoloc.Models;
 using Geoloc.Models.WebModels;
@@ -38,7 +39,8 @@ namespace Geoloc.Controllers
             {
                 Name = webModel.Name,
                 StartTime = DateTime.Now,
-                EndTime = DateTime.Now + TimeSpan.FromHours(1)
+                EndTime = DateTime.Now + TimeSpan.FromHours(1),
+                Location = null
             };
 
             var isSuccess = _meetingService.AddMeeting(model);
