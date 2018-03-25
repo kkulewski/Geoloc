@@ -12,7 +12,7 @@ namespace Geoloc.Data
         }
 
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Event> Meetings { get; set; }
+        public DbSet<Event> Events { get; set; }
         public DbSet<UsersInEvent> UsersInMeetings { get; set; }
         public DbSet<UserRelation> UserRelations { get; set; }
     }

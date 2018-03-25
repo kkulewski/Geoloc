@@ -56,6 +56,12 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.UserName));
 
             #endregion
+
+            #region Event
+
+
+
+            #endregion
         }
     }
 }
