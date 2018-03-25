@@ -31,7 +31,9 @@ namespace Geoloc.Data.Repositories
 
         public IEnumerable<Meeting> GetAll()
         {
-            return _context.Meetings;
+            return _context.Meetings
+                .Include(x => x.Location)
+                .Include(x => x.AppUser);
         }
     }
 }
