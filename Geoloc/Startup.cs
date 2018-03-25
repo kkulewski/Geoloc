@@ -46,7 +46,9 @@ namespace Geoloc
 
             services.AddScoped<IUserRelationService, UserRelationService>();
             services.AddScoped<IUserRelationRepository, UserRelationRepository>();
-
+            
+            services.AddScoped<IMeetingService, MeetingService>();
+            services.AddScoped<IMeetingRepository, MeetingRepository>();
 
             services.AddIdentity<AppUser, UserRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

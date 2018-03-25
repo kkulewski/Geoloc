@@ -59,7 +59,17 @@ namespace Geoloc.Infrastructure
 
             #region Meeting
 
+            CreateMap<Meeting, MeetingModel>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(x => x.StartTime, o => o.MapFrom(s => s.StartTime))
+                .ForMember(x => x.EndTime, o => o.MapFrom(s => s.EndTime))
+                .ForMember(x => x.Location, o => o.MapFrom(s => s.Location));
 
+            CreateMap<MeetingModel, MeetingWebModel>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
+                .ForAllOtherMembers(o => o.Ignore());
 
             #endregion
         }
