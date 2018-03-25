@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Geoloc.Models.Entities
+namespace Geoloc.Data.Entities
 {
     public class Meeting
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime Time { get; set; }
-        public int LocationId { get; set; }
+        public Guid LocationId { get; set; }
 
         public List<AppUser> ParticipantUsers { get; set; }
         public Location Location { get; set; }

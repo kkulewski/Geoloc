@@ -1,16 +1,20 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Geoloc.Data;
+using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories;
-using Geoloc.Models.Entities;
+using Geoloc.Data.Repositories.Abstract;
+using Geoloc.Services;
+using Geoloc.Services.Abstract;
 using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Geoloc
@@ -31,13 +35,23 @@ namespace Geoloc
             services.AddAutoMapper();
             services.AddCors();
 
-            services.AddScoped<ILocationRepository, LocationRepository>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+
+            services.AddScoped<IUserRelationService, UserRelationService>();
+            services.AddScoped<IUserRelationRepository, UserRelationRepository>();
 
 
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, UserRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<UserStore<AppUser, UserRole, ApplicationDbContext, Guid>>()
+                .AddRoleStore<RoleStore<UserRole, ApplicationDbContext, Guid>>()
                 .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
@@ -67,11 +81,6 @@ namespace Geoloc
                         IssuerSigningKey = JwtTokenFactory.GetSecurityKey(Configuration.GetSection("JwtTokens")["Key"])
                     };
                 });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Member", policy => policy.RequireClaim("MembershipId"));
-            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

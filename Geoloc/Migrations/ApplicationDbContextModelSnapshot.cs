@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
 
 namespace Geoloc.Migrations
@@ -20,9 +18,9 @@ namespace Geoloc.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Geoloc.Models.Entities.AppUser", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.AppUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
@@ -43,7 +41,7 @@ namespace Geoloc.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<int?>("MeetingId");
+                    b.Property<Guid?>("MeetingId");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -79,12 +77,12 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.Location", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Location", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AppUserId");
+                    b.Property<Guid>("AppUserId");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -99,12 +97,12 @@ namespace Geoloc.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.Meeting", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("LocationId");
+                    b.Property<Guid>("LocationId");
 
                     b.Property<string>("Name");
 
@@ -117,27 +115,29 @@ namespace Geoloc.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.UsersInMeeting", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.UserRelation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AppUserId");
+                    b.Property<Guid>("InvitedUserId");
 
-                    b.Property<int?>("MeetingId");
+                    b.Property<Guid>("InvitingUserId");
+
+                    b.Property<int>("UserRelationStatus");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("InvitedUserId");
 
-                    b.HasIndex("MeetingId");
+                    b.HasIndex("InvitingUserId");
 
-                    b.ToTable("UsersInMeetings");
+                    b.ToTable("UserRelations");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.UserRole", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
@@ -159,7 +159,25 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.UsersInMeeting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AppUserId");
+
+                    b.Property<Guid>("MeetingId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("UsersInMeetings");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -168,8 +186,7 @@ namespace Geoloc.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<Guid>("RoleId");
 
                     b.HasKey("Id");
 
@@ -178,7 +195,7 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -187,8 +204,7 @@ namespace Geoloc.Migrations
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -197,7 +213,7 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider");
 
@@ -205,8 +221,7 @@ namespace Geoloc.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -215,11 +230,11 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
-                    b.Property<string>("RoleId");
+                    b.Property<Guid>("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -228,9 +243,9 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("LoginProvider");
 
@@ -243,79 +258,95 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.AppUser", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.AppUser", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.Meeting")
+                    b.HasOne("Geoloc.Data.Entities.Meeting")
                         .WithMany("ParticipantUsers")
                         .HasForeignKey("MeetingId");
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.Location", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Location", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser", "AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser", "AppUser")
                         .WithMany("Locations")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.Meeting", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.Location", "Location")
+                    b.HasOne("Geoloc.Data.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Geoloc.Models.Entities.UsersInMeeting", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.UserRelation", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser", "AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser", "InvitedUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("InvitedUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Geoloc.Models.Entities.Meeting", "Meeting")
+                    b.HasOne("Geoloc.Data.Entities.AppUser", "InvitingUser")
                         .WithMany()
-                        .HasForeignKey("MeetingId");
+                        .HasForeignKey("InvitingUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.UsersInMeeting", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Geoloc.Data.Entities.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Geoloc.Data.Entities.Meeting", "Meeting")
+                        .WithMany()
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Geoloc.Data.Entities.UserRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Geoloc.Data.Entities.UserRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Geoloc.Models.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Models.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

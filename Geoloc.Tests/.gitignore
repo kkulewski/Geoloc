@@ -132,9 +132,6 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
-#CI config
-web.config
-
 # Click-Once directory
 publish/
 
