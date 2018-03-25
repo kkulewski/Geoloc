@@ -82,6 +82,8 @@ namespace Geoloc.Infrastructure
             CreateMap<MeetingModel, MeetingWebModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(x => x.LocationId, o => o.MapFrom(s => s.Location.Id))
+                .ForMember(x => x.UserId, o => o.MapFrom(s => s.User.Id))
                 .ForAllOtherMembers(o => o.Ignore());
 
             #endregion

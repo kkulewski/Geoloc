@@ -45,8 +45,8 @@ namespace Geoloc.Controllers
                 Name = webModel.Name,
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now + TimeSpan.FromHours(1),
-                Location = _locationService.GetLastKnownLocations().FirstOrDefault(),
-                User = _userService.GetAllUsers().FirstOrDefault()
+                Location = _locationService.GetById(webModel.LocationId),
+                User = _userService.GetById(webModel.UserId)
             };
 
             var isSuccess = _meetingService.AddMeeting(model);
