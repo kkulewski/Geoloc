@@ -40,34 +40,14 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody]MeetingWebModel webModel)
+        public IActionResult Create([FromBody]MeetingWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var location = _locationService.GetById(webModel.LocationId);
-            if (location == null)
-            {
-                return BadRequest();
-            }
-
-            var user = _userService.GetById(webModel.UserId);
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            var model = new MeetingModel
-            {
-                // TODO: handle time inputs
-                Name = webModel.Name,
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now + TimeSpan.FromHours(1),
-                Location = location,
-                User = user
-            };
+            var model = Mapper.Map<MeetingModel>(webModel);
 
             var isSuccess = _meetingService.AddMeeting(model);
             if (!isSuccess)

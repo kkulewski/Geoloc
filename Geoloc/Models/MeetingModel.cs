@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Geoloc.Data.Entities;
 
 namespace Geoloc.Models
 {
@@ -9,8 +8,10 @@ namespace Geoloc.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public LocationModel Location { get; set; }
-        public UserModel User { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public string Description { get; set; }
+        public UserModel Host { get; set; }
+        public IEnumerable<UserModel> Participants { get; set; }
     }
 }

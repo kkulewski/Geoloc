@@ -61,40 +61,31 @@ namespace Geoloc.Infrastructure
             #region Meeting
 
             CreateMap<MeetingModel, Meeting>()
-                .ForMember(x => x.Id, o => o.Ignore())
-                .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
-                .ForMember(x => x.StartTime, o => o.MapFrom(s => s.StartTime))
-                .ForMember(x => x.EndTime, o => o.MapFrom(s => s.EndTime))
-                .ForMember(x => x.LocationId, o => o.MapFrom(s => s.Location.Id))
-                .ForMember(x => x.Location, o => o.MapFrom(s => s.Location))
-                .ForMember(x => x.AppUserId, o => o.MapFrom(s => s.User.Id))
-                .ForMember(x => x.AppUser, o => o.MapFrom(s => s.User));
+                .ForMember(x => x.HostId, o => o.MapFrom(s => s.Host.Id))
+                .ForMember(x => x.AppUsers, o => o.MapFrom(s => s.Participants))
+                .ForMember(x => x.Host, o => o.Ignore());
+
 
             CreateMap<Meeting, MeetingModel>()
-                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
-                .ForMember(x => x.StartTime, o => o.MapFrom(s => s.StartTime))
-                .ForMember(x => x.EndTime, o => o.MapFrom(s => s.EndTime))
-                .ForMember(x => x.Location, o => o.MapFrom(s => s.Location))
-                .ForMember(x => x.User, o => o.MapFrom(s => s.AppUser))
-                .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(x => x.Participants, o => o.MapFrom(s => s.AppUsers));
 
             CreateMap<MeetingModel, MeetingWebModel>()
-                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.Name, o => o.MapFrom(s => s.Name))
-                .ForMember(x => x.LocationId, o => o.MapFrom(s => s.Location.Id))
-                .ForMember(x => x.UserId, o => o.MapFrom(s => s.User.Id))
-                .ForAllOtherMembers(o => o.Ignore());
+                .ForMember(x => x.Time, o => o.MapFrom(s => s.StartTime.TimeOfDay))
+                .ForMember(x => x.Date, o => o.MapFrom(s => s.StartTime.Date));
+
+            CreateMap<MeetingWebModel, MeetingModel>()
+                .ForMember(x => x.StartTime, o => o.MapFrom(s => s.Date.Date.Add(s.Time.TimeOfDay)));
 
             #endregion
 
-            #region User
+            #region UserModel
 
             CreateMap<UserModel, AppUser>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.UserName))
                 .ForMember(x => x.LastName, o => o.MapFrom(s => s.LastName))
-                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.FirstName));
+                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.FirstName))
+                .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<AppUser, UserModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
@@ -102,6 +93,14 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(x => x.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForAllOtherMembers(o => o.Ignore());
+
+            #endregion
+
+            #region UserWebModel
+
+            CreateMap<UserWebModel, UserModel>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
+                .ForAllOtherMembers(x => x.Ignore());
 
             #endregion
         }

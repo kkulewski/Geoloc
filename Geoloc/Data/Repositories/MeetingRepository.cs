@@ -19,8 +19,7 @@ namespace Geoloc.Data.Repositories
         public Meeting Get(Guid id)
         {
             return _context.Meetings
-                .Include(x => x.Location)
-                .Include(x => x.AppUser)
+                .Include(x => x.Host)
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -32,8 +31,7 @@ namespace Geoloc.Data.Repositories
         public IEnumerable<Meeting> GetAll()
         {
             return _context.Meetings
-                .Include(x => x.Location)
-                .Include(x => x.AppUser);
+                .Include(x => x.Host);
         }
     }
 }

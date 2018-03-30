@@ -39,6 +39,7 @@ namespace Geoloc.Services
             try
             {
                 var meeting = Mapper.Map<Meeting>(model);
+                meeting.Id = Guid.NewGuid();
                 _meetingRepository.Add(meeting);
                 _unitOfWork.Save();
                 return true;

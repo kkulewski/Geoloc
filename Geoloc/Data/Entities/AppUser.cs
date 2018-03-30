@@ -8,6 +8,6 @@ namespace Geoloc.Data.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public IList<Location> Locations { get; set; }
+        public virtual ICollection<Location> Locations { get; set; }
     }
 }

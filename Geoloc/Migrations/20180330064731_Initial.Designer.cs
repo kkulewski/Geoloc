@@ -12,8 +12,8 @@ using System;
 namespace Geoloc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180310150504_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20180330064731_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,15 +106,21 @@ namespace Geoloc.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("LocationId");
+                    b.Property<string>("Description");
+
+                    b.Property<Guid>("HostId");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
 
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("Time");
+                    b.Property<DateTime>("StartTime");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("HostId");
 
                     b.ToTable("Meetings");
                 });
@@ -161,24 +167,6 @@ namespace Geoloc.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("Geoloc.Data.Entities.UsersInMeeting", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("AppUserId");
-
-                    b.Property<Guid>("MeetingId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("MeetingId");
-
-                    b.ToTable("UsersInMeetings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -265,7 +253,7 @@ namespace Geoloc.Migrations
             modelBuilder.Entity("Geoloc.Data.Entities.AppUser", b =>
                 {
                     b.HasOne("Geoloc.Data.Entities.Meeting")
-                        .WithMany("ParticipantUsers")
+                        .WithMany("AppUsers")
                         .HasForeignKey("MeetingId");
                 });
 
@@ -274,15 +262,15 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.AppUser", "AppUser")
                         .WithMany("Locations")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.Location", "Location")
+                    b.HasOne("Geoloc.Data.Entities.AppUser", "Host")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("HostId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Geoloc.Data.Entities.UserRelation", b =>
@@ -290,25 +278,12 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.AppUser", "InvitedUser")
                         .WithMany()
                         .HasForeignKey("InvitedUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Geoloc.Data.Entities.AppUser", "InvitingUser")
                         .WithMany()
                         .HasForeignKey("InvitingUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Geoloc.Data.Entities.UsersInMeeting", b =>
-                {
-                    b.HasOne("Geoloc.Data.Entities.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Geoloc.Data.Entities.Meeting", "Meeting")
-                        .WithMany()
-                        .HasForeignKey("MeetingId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -316,7 +291,7 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.UserRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -324,7 +299,7 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -332,7 +307,7 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -340,12 +315,12 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.UserRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -353,7 +328,7 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.AppUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }
