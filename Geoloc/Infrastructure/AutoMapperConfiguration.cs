@@ -101,6 +101,8 @@ namespace Geoloc.Infrastructure
             CreateMap<UserWebModel, UserModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForAllOtherMembers(x => x.Ignore());
+            CreateMap<UserModel, UserWebModel>()
+                .ForMember(x => x.Email, o => o.MapFrom(s => s.UserName));
 
             #endregion
         }
