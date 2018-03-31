@@ -8,6 +8,7 @@ namespace Geoloc.Services.Abstract
     {
         MeetingModel GetById(Guid id);
         bool AddMeeting(MeetingModel model);
+        bool JoinMeetingAsUser(Guid userId, Guid meetingId);
         IEnumerable<MeetingModel> GetAllMeetings();
     }
 }

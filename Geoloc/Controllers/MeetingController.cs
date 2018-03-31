@@ -57,5 +57,26 @@ namespace Geoloc.Controllers
 
             return new OkObjectResult(JsonConvert.SerializeObject("Meeting added"));
         }
+
+        [HttpPost("[action]")]
+        public IActionResult Join([FromBody] JoinMeetingRequestWebModel webModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            if(_meetingService.JoinMeetingAsUser(webModel.UserId, webModel.MeetingId))
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
+}
+
+public class JoinMeetingRequestWebModel
+{
+    public Guid UserId { get; set; }
+    public Guid MeetingId { get; set; }
 }

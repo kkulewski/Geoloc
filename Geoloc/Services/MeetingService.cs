@@ -13,11 +13,14 @@ namespace Geoloc.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMeetingRepository _meetingRepository;
+        private readonly IAppUserRepository _userRepository;
 
-        public MeetingService(IUnitOfWork unitOfWork, IMeetingRepository meetingRepository)
+        public MeetingService(IUnitOfWork unitOfWork, IMeetingRepository meetingRepository,
+            IAppUserRepository userRepository)
         {
             _unitOfWork = unitOfWork;
             _meetingRepository = meetingRepository;
+            _userRepository = userRepository;
         }
 
         public MeetingModel GetById(Guid id)
@@ -40,6 +43,10 @@ namespace Geoloc.Services
             {
                 var meeting = Mapper.Map<Meeting>(model);
                 meeting.Id = Guid.NewGuid();
+                meeting.AppUsersInMeeting.Add(new AppUserInMeeting
+                {
+                    AppUserId = meeting.MeetingHostId
+                });
                 _meetingRepository.Add(meeting);
                 _unitOfWork.Save();
                 return true;
@@ -56,6 +63,24 @@ namespace Geoloc.Services
             var meetings = _meetingRepository.GetAll();
             var result = Mapper.Map<IEnumerable<MeetingModel>>(meetings);
             return result;
+        }
+
+        public bool JoinMeetingAsUser(Guid userId, Guid meetingId)
+        {
+            try
+            {
+                var meeting = _meetingRepository.Get(meetingId);
+                meeting.AppUsersInMeeting.Add(new AppUserInMeeting
+                {
+                    AppUserId = userId
+                });
+                _unitOfWork.Save();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

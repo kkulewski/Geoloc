@@ -11,7 +11,7 @@ namespace Geoloc.Models
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Description { get; set; }
-        public UserModel Host { get; set; }
+        public Guid HostId { get; set; }
         public IEnumerable<UserModel> Participants { get; set; }
     }
 }

@@ -14,5 +14,13 @@ namespace Geoloc.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<UserRelation> UserRelations { get; set; }
+        public DbSet<AppUserInMeeting> AppUserInMeetings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<AppUserInMeeting>()
+                .HasKey(a => new {a.AppUserId, a.MeetingId});
+            base.OnModelCreating(builder);
+        }
     }
 }

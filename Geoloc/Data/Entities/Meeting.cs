@@ -14,11 +14,8 @@ namespace Geoloc.Data.Entities
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Description { get; set; }
-        public Guid HostId { get; set; }
+        public Guid MeetingHostId { get; set; }
 
-        [ForeignKey("HostId")]
-        public AppUser Host { get; set; }
-
-        public virtual ICollection<AppUser> AppUsers { get; set; }
+        public virtual ICollection<AppUserInMeeting> AppUsersInMeeting { get; set; }
     }
 }
