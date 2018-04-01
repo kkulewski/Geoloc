@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Geoloc.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace Geoloc.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,7 +59,7 @@ namespace Geoloc.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -125,19 +125,16 @@ namespace Geoloc.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    LocationId = table.Column<Guid>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    HostId = table.Column<Guid>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
+                    Longitude = table.Column<double>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false)
+                    StartTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Meetings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Meetings_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,31 +197,6 @@ namespace Geoloc.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UsersInMeetings",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    AppUserId = table.Column<Guid>(nullable: false),
-                    MeetingId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UsersInMeetings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UsersInMeetings_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UsersInMeetings_Meetings_MeetingId",
-                        column: x => x.MeetingId,
-                        principalTable: "Meetings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -275,9 +247,9 @@ namespace Geoloc.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Meetings_LocationId",
+                name: "IX_Meetings_HostId",
                 table: "Meetings",
-                column: "LocationId");
+                column: "HostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRelations_InvitedUserId",
@@ -289,23 +261,13 @@ namespace Geoloc.Migrations
                 table: "UserRelations",
                 column: "InvitingUserId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersInMeetings_AppUserId",
-                table: "UsersInMeetings",
-                column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UsersInMeetings_MeetingId",
-                table: "UsersInMeetings",
-                column: "MeetingId");
-
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -313,7 +275,7 @@ namespace Geoloc.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserLogins_AspNetUsers_UserId",
@@ -321,7 +283,7 @@ namespace Geoloc.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
@@ -329,7 +291,7 @@ namespace Geoloc.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Locations_AspNetUsers_AppUserId",
@@ -337,14 +299,22 @@ namespace Geoloc.Migrations
                 column: "AppUserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Meetings_AspNetUsers_HostId",
+                table: "Meetings",
+                column: "HostId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Locations_AspNetUsers_AppUserId",
-                table: "Locations");
+                name: "FK_Meetings_AspNetUsers_HostId",
+                table: "Meetings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -362,10 +332,10 @@ namespace Geoloc.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "UserRelations");
+                name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "UsersInMeetings");
+                name: "UserRelations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -375,9 +345,6 @@ namespace Geoloc.Migrations
 
             migrationBuilder.DropTable(
                 name: "Meetings");
-
-            migrationBuilder.DropTable(
-                name: "Locations");
         }
     }
 }

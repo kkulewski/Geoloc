@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Geoloc.Data.Entities
+namespace Geoloc.Models
 {
-    public class Meeting
+    public class MeetingModel
     {
-        [Key]
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Description { get; set; }
-        public Guid MeetingHostId { get; set; }
-
-        public virtual ICollection<AppUserInMeeting> AppUsersInMeeting { get; set; }
+        public Guid HostId { get; set; }
+        public IEnumerable<UserModel> Participants { get; set; }
     }
 }

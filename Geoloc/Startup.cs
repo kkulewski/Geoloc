@@ -46,7 +46,11 @@ namespace Geoloc
 
             services.AddScoped<IUserRelationService, UserRelationService>();
             services.AddScoped<IUserRelationRepository, UserRelationRepository>();
+            
+            services.AddScoped<IMeetingService, MeetingService>();
+            services.AddScoped<IMeetingRepository, MeetingRepository>();
 
+            services.AddScoped<IAuthService, AuthService>();
 
             services.AddIdentity<AppUser, UserRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -63,7 +67,8 @@ namespace Geoloc
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-            services.AddAuthentication(options =>
+            services
+                .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 })

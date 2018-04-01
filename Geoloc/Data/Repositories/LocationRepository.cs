@@ -15,6 +15,12 @@ namespace Geoloc.Data.Repositories
         {
             _context = context;
         }
+
+        public Location Get(Guid id)
+        {
+            return _context.Locations
+                .FirstOrDefault(x => x.Id == id);
+        }
         
         public IEnumerable<Location> GetLocationsByUser(Guid userId)
         {

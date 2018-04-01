@@ -1,12 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Geoloc.Data.Entities
 {
-    public class UsersInMeeting
+    public class AppUserInMeeting
     {
-        public Guid Id { get; set; }
-        
+        [Key]
         public Guid AppUserId { get; set; }
+        [Key]
         public Guid MeetingId { get; set; }
         public AppUser AppUser { get; set; }
         public Meeting Meeting { get; set; }

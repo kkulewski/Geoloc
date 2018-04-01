@@ -20,7 +20,21 @@ namespace Geoloc.Services
             _unitOfWork = unitOfWork;
             _locationRepository = locationRepository;
         }
-        
+
+        public LocationModel GetById(Guid id)
+        {
+            try
+            {
+                var location = _locationRepository.Get(id);
+                var result = Mapper.Map<LocationModel>(location);
+                return result;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public bool AddLocation(LocationModel model)
         {
             try

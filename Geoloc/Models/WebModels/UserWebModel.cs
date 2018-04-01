@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Geoloc.Models
+namespace Geoloc.Models.WebModels
 {
-    public class UserModel
+    public class UserWebModel
     {
         public Guid Id { get; set; }
-        public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
     }
 }

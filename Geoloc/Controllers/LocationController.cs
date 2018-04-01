@@ -29,12 +29,18 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
 
+            var user = _userService.GetById(webModel.UserId);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
             var model = new LocationModel
             {
                 Latitude = webModel.Latitude,
                 Longitude = webModel.Longitude,
                 Timestamp = webModel.Timestamp,
-                User = _userService.GetById(webModel.UserId)
+                User = user
             };
 
             var isSuccess = _locationService.AddLocation(model);
