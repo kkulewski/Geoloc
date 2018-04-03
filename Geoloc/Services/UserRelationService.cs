@@ -32,7 +32,9 @@ namespace Geoloc.Services
                     x.InvitingUser.Id == userId && x.InvitedUser.Id == model.InvitedUser.Id ||
                     x.InvitedUser.Id == userId && x.InvitingUser.Id == model.InvitedUser.Id);
 
-                if (relationExists)
+                var selfInvitation = model.InvitingUser.Id == model.InvitedUser.Id;
+
+                if (relationExists || selfInvitation)
                 {
                     return false;
                 }
