@@ -4,11 +4,12 @@ using Geoloc.Models.WebModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Geoloc.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 
 namespace Geoloc.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]/[action]"), AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;

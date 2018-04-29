@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Geoloc.Data;
 using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories;
@@ -11,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +33,6 @@ namespace Geoloc
             services.AddAutoMapper();
             services.AddCors();
 
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
@@ -51,27 +48,22 @@ namespace Geoloc
             services.AddScoped<IMeetingRepository, MeetingRepository>();
 
             services.AddScoped<IAuthService, AuthService>();
-
-            services.AddIdentity<AppUser, UserRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddUserStore<UserStore<AppUser, UserRole, ApplicationDbContext, Guid>>()
-                .AddRoleStore<RoleStore<UserRole, ApplicationDbContext, Guid>>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<IdentityOptions>(options =>
+            var builder = services.AddIdentityCore<AppUser>(opt =>
             {
-                options.Password.RequiredLength = 3;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireNonAlphanumeric = false;
             });
+            builder = new IdentityBuilder(builder.UserType, typeof(UserRole), builder.Services);
+            builder.AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.AddRoleValidator<RoleValidator<UserRole>>();
+            builder.AddRoleManager<RoleManager<UserRole>>();
+            builder.AddSignInManager<SignInManager<AppUser>>();
 
             services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -96,6 +88,7 @@ namespace Geoloc
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,7 +101,6 @@ namespace Geoloc
             );
 
             app.UseStaticFiles();
-            app.UseAuthentication();
 
             app.UseMvc();
         }

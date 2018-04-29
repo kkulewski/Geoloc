@@ -13,14 +13,11 @@ namespace Geoloc.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMeetingRepository _meetingRepository;
-        private readonly IAppUserRepository _userRepository;
 
-        public MeetingService(IUnitOfWork unitOfWork, IMeetingRepository meetingRepository,
-            IAppUserRepository userRepository)
+        public MeetingService(IUnitOfWork unitOfWork, IMeetingRepository meetingRepository)
         {
             _unitOfWork = unitOfWork;
             _meetingRepository = meetingRepository;
-            _userRepository = userRepository;
         }
 
         public MeetingModel GetById(Guid id)

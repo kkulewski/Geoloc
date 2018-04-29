@@ -4,12 +4,13 @@ using AutoMapper;
 using Geoloc.Models;
 using Geoloc.Models.WebModels;
 using Geoloc.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Geoloc.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     public class MeetingController : Controller
     {
         private readonly IMeetingService _meetingService;
