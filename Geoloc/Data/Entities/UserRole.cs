@@ -7,7 +7,6 @@ namespace Geoloc.Data.Entities
     {
         public UserRole(string roleName): base (roleName)
         {
-            
         }
     }
 }

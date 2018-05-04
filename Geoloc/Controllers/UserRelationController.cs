@@ -48,7 +48,7 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody]UserRelationWebModel webModel)
+        public IActionResult Send([FromBody] UserRelationWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Geoloc.Controllers
             {
                 return BadRequest();
             }
-            
+
             var isSuccess = _userRelationService.AcceptRelationRequest(id);
             if (!isSuccess)
             {

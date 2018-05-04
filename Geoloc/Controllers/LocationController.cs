@@ -4,7 +4,6 @@ using AutoMapper;
 using Geoloc.Models;
 using Geoloc.Models.WebModels;
 using Geoloc.Services.Abstract;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -23,7 +22,7 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody]LocationWebModel webModel)
+        public IActionResult Send([FromBody] LocationWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
