@@ -18,27 +18,6 @@ namespace Geoloc.Infrastructure
 
             #endregion
 
-            #region Location
-
-            CreateMap<LocationModel, Location>()
-                .ForMember(x => x.Id, o => o.Ignore())
-                .ForMember(x => x.AppUser, o => o.Ignore())
-                .ForMember(x => x.AppUserId, o => o.MapFrom(s => s.User.Id))
-                .ForMember(x => x.CreatedOn, o => o.MapFrom(s => s.Timestamp));
-
-            CreateMap<Location, LocationModel>()
-                .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
-                .ForMember(x => x.User, o => o.MapFrom(s => s.AppUser))
-                .ForMember(x => x.Timestamp, o => o.MapFrom(s => s.CreatedOn));
-
-            CreateMap<LocationModel, LocationWebModel>()
-                .ForMember(x => x.Latitude, o => o.MapFrom(s => s.Latitude))
-                .ForMember(x => x.Longitude, o => o.MapFrom(s => s.Longitude))
-                .ForMember(x => x.UserId, o => o.MapFrom(s => s.User.Id))
-                .ForMember(x => x.Username, o => o.MapFrom(s => s.User.UserName));
-
-            #endregion
-
             #region UserRelation
 
             CreateMap<UserRelation, UserRelationModel>()
@@ -122,7 +101,6 @@ namespace Geoloc.Infrastructure
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.AppUser.Id))
                 .ForMember(x => x.FirstName, o => o.MapFrom(s => s.AppUser.FirstName))
                 .ForMember(x => x.LastName, o => o.MapFrom(s => s.AppUser.LastName))
-                .ForMember(x => x.Locations, o => o.MapFrom(s => s.AppUser.Locations))
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.AppUser.UserName))
                 .ForMember(x => x.Email, o => o.MapFrom(s => s.AppUser.Email))
                 .ForAllOtherMembers(x => x.Ignore());

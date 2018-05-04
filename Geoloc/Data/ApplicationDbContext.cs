@@ -11,7 +11,6 @@ namespace Geoloc.Data
         {
         }
 
-        public DbSet<Location> Locations { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<UserRelation> UserRelations { get; set; }
         public DbSet<AppUserInMeeting> AppUserInMeetings { get; set; }
