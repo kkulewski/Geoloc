@@ -14,14 +14,10 @@ namespace Geoloc.Controllers
     public class MeetingController : Controller
     {
         private readonly IMeetingService _meetingService;
-        private readonly ILocationService _locationService;
-        private readonly IUserService _userService;
 
-        public MeetingController(IMeetingService meetingService, ILocationService locationService, IUserService userService)
+        public MeetingController(IMeetingService meetingService)
         {
             _meetingService = meetingService;
-            _locationService = locationService;
-            _userService = userService;
         }
 
         [HttpGet]
@@ -41,7 +37,7 @@ namespace Geoloc.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create([FromBody]MeetingWebModel webModel)
+        public IActionResult Create([FromBody] MeetingWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
@@ -66,7 +62,8 @@ namespace Geoloc.Controllers
             {
                 return BadRequest();
             }
-            if(_meetingService.JoinMeetingAsUser(webModel.UserId, webModel.MeetingId))
+
+            if (_meetingService.JoinMeetingAsUser(webModel.UserId, webModel.MeetingId))
             {
                 return Ok();
             }
@@ -74,10 +71,4 @@ namespace Geoloc.Controllers
             return BadRequest();
         }
     }
-}
-
-public class JoinMeetingRequestWebModel
-{
-    public Guid UserId { get; set; }
-    public Guid MeetingId { get; set; }
 }

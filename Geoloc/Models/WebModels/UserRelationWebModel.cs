@@ -1,5 +1,4 @@
 ﻿using System;
-using Geoloc.Data.Entities;
 
 namespace Geoloc.Models.WebModels
 {

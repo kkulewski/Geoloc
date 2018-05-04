@@ -21,7 +21,7 @@ namespace Geoloc.Controllers
 
         // POST api/account/username
         [HttpPost]
-        public async Task<IActionResult> Username([FromBody]string id)
+        public async Task<IActionResult> Username([FromBody] string id)
         {
             var username = await _authService.GetUserNameById(id);
             return new OkObjectResult(JsonConvert.SerializeObject(username));
@@ -29,7 +29,7 @@ namespace Geoloc.Controllers
 
         // POST api/account/register
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody]RegisterWebModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterWebModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace Geoloc.Controllers
 
         // POST api/account/login
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody]LoginWebModel model)
+        public async Task<IActionResult> Login([FromBody] LoginWebModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace Geoloc.Controllers
                 id = identity.Claims.Single(c => c.Type == "id").Value,
                 auth_token = new JwtSecurityTokenHandler().WriteToken(token)
             };
-            
+
             return new OkObjectResult(JsonConvert.SerializeObject(response));
         }
     }

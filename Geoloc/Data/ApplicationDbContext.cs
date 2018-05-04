@@ -18,8 +18,10 @@ namespace Geoloc.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<AppUserInMeeting>()
+            builder
+                .Entity<AppUserInMeeting>()
                 .HasKey(a => new {a.AppUserId, a.MeetingId});
+
             base.OnModelCreating(builder);
         }
     }

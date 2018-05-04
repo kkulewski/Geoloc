@@ -9,11 +9,8 @@ namespace Geoloc.Services.Abstract
     public interface IAuthService
     {
         Task<string> GetUserNameById(string userId);
-
         Task<IdentityResult> Register(RegisterWebModel model);
-
         Task<ClaimsIdentity> GetClaimsIdentity(LoginWebModel model);
-
         Task<JwtSecurityToken> GetUserToken(LoginWebModel model);
     }
 }
