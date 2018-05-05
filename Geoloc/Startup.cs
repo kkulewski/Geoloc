@@ -55,8 +55,6 @@ namespace Geoloc
             });
             builder = new IdentityBuilder(builder.UserType, typeof(UserRole), builder.Services);
             builder.AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.AddRoleValidator<RoleValidator<UserRole>>();
-            builder.AddRoleManager<RoleManager<UserRole>>();
             builder.AddSignInManager<SignInManager<AppUser>>();
 
             services
