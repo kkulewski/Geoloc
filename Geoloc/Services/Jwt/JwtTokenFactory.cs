@@ -14,21 +14,30 @@ namespace Geoloc.Services.Jwt
         private readonly string _audience;
         private readonly SecurityKey _securityKey;
         private readonly int _expiryInMinutes;
-        private readonly string _subject;
-        private readonly IList<Claim> _claims = new List<Claim>();
+        private readonly IList<Claim> _claims;
+
+        public JwtTokenFactory(IConfiguration config)
+        {
+            _issuer = config.GetSection("JwtTokens")["Issuer"];
+            _audience = config.GetSection("JwtTokens")["Audience"];
+            _securityKey = GetSecurityKey(config.GetSection("JwtTokens")["Key"]);
+            _expiryInMinutes = int.Parse(config.GetSection("JwtTokens")["Expiry"]);
+            _claims = new List<Claim>();
+        }
 
         public static SecurityKey GetSecurityKey(string key)
         {
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         }
 
-        public JwtTokenFactory(IConfiguration config, string subject)
+        public JwtTokenFactory AddClaims(IEnumerable<Claim> claims)
         {
-            _issuer = config.GetSection("JwtTokens")["Issuer"];
-            _audience = config.GetSection("JwtTokens")["Audience"];
-            _securityKey = GetSecurityKey(config.GetSection("JwtTokens")["Key"]);
-            _expiryInMinutes = int.Parse(config.GetSection("JwtTokens")["Expiry"]);
-            _subject = subject;
+            foreach (var claim in claims)
+            {
+                AddClaim(claim);
+            }
+
+            return this;
         }
 
         public JwtTokenFactory AddClaim(Claim claim)
@@ -37,21 +46,17 @@ namespace Geoloc.Services.Jwt
             return this;
         }
 
-        public JwtTokenFactory AddClaim(string type, string value)
-        {
-            _claims.Add(new Claim(type, value));
-            return this;
-        }
-
         public JwtSecurityToken Build()
         {
-            return new JwtSecurityToken(
+            return new JwtSecurityToken
+            (
                 _issuer,
                 _audience,
                 _claims,
                 DateTime.UtcNow,
                 DateTime.UtcNow.AddMinutes(_expiryInMinutes),
-                new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256));
+                new SigningCredentials(_securityKey, SecurityAlgorithms.HmacSha256)
+            );
         }
     }
 }
