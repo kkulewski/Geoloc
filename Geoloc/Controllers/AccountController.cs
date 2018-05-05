@@ -59,15 +59,7 @@ namespace Geoloc.Controllers
                 return BadRequest(ModelState);
             }
 
-            // TODO: only call GetUserToken - it has all required data. Get claims identity is only used for user id now.
-            var identity = await _authService.GetClaimsIdentity(model);
-            if (identity == null)
-            {
-                ModelState.TryAddModelError("login_failure", "Invalid username or password.");
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(ModelState));
-            }
-
-            var token = await _authService.GetUserToken(model);
+            var token = await _authService.CreateToken(model);
             if (token == null)
             {
                 ModelState.TryAddModelError("login_failure", "Invalid username or password.");
@@ -76,8 +68,7 @@ namespace Geoloc.Controllers
 
             var response = new
             {
-                // TODO: user id should be retreived from token!
-                id = identity.Claims.Single(c => c.Type == "id").Value,
+                id = token.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value,
                 auth_token = new JwtSecurityTokenHandler().WriteToken(token)
             };
 

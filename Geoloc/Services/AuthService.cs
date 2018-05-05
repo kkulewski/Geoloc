@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using AutoMapper;
 using Geoloc.Data;
@@ -45,54 +44,48 @@ namespace Geoloc.Services
             return result;
         }
 
-        public async Task<JwtSecurityToken> GetUserToken(LoginWebModel model)
+        public async Task<JwtSecurityToken> CreateToken(LoginWebModel model)
         {
-            var identity = await GetClaimsIdentity(model);
-            if (identity == null)
+            var user = await GetUser(model);
+            if (user == null)
             {
                 return null;
             }
 
-            var token = new JwtTokenFactory(_configuration, model.UserName)
-                .AddClaim(identity.FindFirst("role"))
-                .AddClaim(identity.FindFirst("id"))
+            var claims = new[]
+            {
+                new Claim("user_id", user.Id.ToString()),
+                new Claim("some_type", "some_value")
+            };
+
+            var token = new JwtTokenFactory(_configuration)
+                .AddClaims(claims)
                 .Build();
 
-            return await Task.Run(() => token);
+            return token;
         }
 
-        public async Task<ClaimsIdentity> GetClaimsIdentity(LoginWebModel model)
+        private async Task<AppUser> GetUser(LoginWebModel model)
         {
-            if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+            var invalidModel = string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password);
+            if (invalidModel)
             {
                 return null;
             }
 
-            var userToVerify = await _userManager.FindByNameAsync(model.UserName);
-            if (userToVerify == null)
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user == null)
             {
                 return null;
             }
 
-            var passwordValid = await _userManager.CheckPasswordAsync(userToVerify, model.Password);
+            var passwordValid = await _userManager.CheckPasswordAsync(user, model.Password);
             if (!passwordValid)
             {
                 return null;
             }
 
-            return await Task.FromResult(GenerateClaimsIdentity(model.UserName, userToVerify.Id.ToString()));
-        }
-
-        private static ClaimsIdentity GenerateClaimsIdentity(string userName, string id)
-        {
-            var identity = new GenericIdentity(userName, "Token");
-            var claims = new[]
-            {
-                new Claim("id", id),
-                new Claim("role", "api_access")
-            };
-
-            return new ClaimsIdentity(identity, claims);
+            return user;
         }
     }
 }
