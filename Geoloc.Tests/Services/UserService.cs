@@ -56,5 +56,33 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsNull(result);
         }
+
+        [Test]
+        public void GetByUserName_GivenExistingName_ReturnsExpectedUser()
+        {
+            // Arrange
+            const string userName = "TestUser";
+            var user = new AppUser { UserName = "TestUser" };
+            _repoMock.Setup(x => x.Get(userName)).Returns(user);
+
+            // Act
+            var result = _userService.GetByUserName(userName);
+
+            // Assert
+            Assert.AreEqual(user.UserName, result.UserName);
+        }
+
+        [Test]
+        public void GetByUserName_GivenNonExistingName_ReturnsNull()
+        {
+            // Arrange
+            _repoMock.Setup(x => x.Get(It.IsAny<string>())).Returns((AppUser)null);
+
+            // Act
+            var result = _userService.GetByUserName("abc");
+
+            // Assert
+            Assert.IsNull(result);
+        }
     }
 }
