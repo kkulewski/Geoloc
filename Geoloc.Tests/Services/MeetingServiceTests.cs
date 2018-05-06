@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using AutoMapper;
 using Geoloc.Infrastructure;
+using Geoloc.Models;
 using Geoloc.Services.Abstract;
 
 namespace Geoloc.Tests.Services
@@ -58,6 +59,46 @@ namespace Geoloc.Tests.Services
 
             // Assert
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void AddMeeting_GivenValidModel_ReturnsTrue()
+        {
+            // Arrange
+            var model = new MeetingModel();
+            _repoMock.Setup(x => x.Add(It.IsAny<Meeting>()));
+
+            // Act
+            var result = _meetingService.AddMeeting(model);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void AddMeeting_GivenValidModel_AddsMappedMeetingEntityToRepository()
+        {
+            // Arrange
+            var model = new MeetingModel { Name = "Some meeting", Description = "Some description" };
+            Meeting entity = null;
+            _repoMock.Setup(x => x.Add(It.IsAny<Meeting>())).Callback<Meeting>(mappedModel => entity = mappedModel);
+
+            // Act
+            _meetingService.AddMeeting(model);
+
+            // Assert
+            Assert.AreEqual(model.Name, entity.Name);
+            Assert.AreEqual(model.Description, entity.Description);
+        }
+
+        [Test]
+        public void AddMeeting_GivenNull_ReturnsFalse()
+        {
+            // Act
+            var result = _meetingService.AddMeeting(null);
+
+            // Assert
+            Assert.IsFalse(result);
         }
     }
 }
