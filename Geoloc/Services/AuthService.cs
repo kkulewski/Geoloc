@@ -6,30 +6,21 @@ using Geoloc.Data;
 using Geoloc.Data.Entities;
 using Geoloc.Models.WebModels;
 using Geoloc.Services.Abstract;
-using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 
 namespace Geoloc.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
+        private readonly JwtTokenFactory _tokenFactory;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
+        public AuthService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, JwtTokenFactory tokenFactory)
         {
-            _configuration = configuration;
-            _userManager = userManager;
             _unitOfWork = unitOfWork;
-        }
-
-        public async Task<string> GetUserNameById(string userId)
-        {
-            var result = await _userManager.FindByIdAsync(userId);
-            var username = result.UserName;
-            return username;
+            _userManager = userManager;
+            _tokenFactory = tokenFactory;
         }
         
         public async Task<IdentityResult> Register(RegisterWebModel model)
@@ -58,11 +49,9 @@ namespace Geoloc.Services
                 new Claim("some_type", "some_value")
             };
 
-            var token = new JwtTokenFactory(_configuration)
+            return _tokenFactory
                 .AddClaims(claims)
                 .Build();
-
-            return token;
         }
 
         private async Task<AppUser> GetUser(LoginWebModel model)

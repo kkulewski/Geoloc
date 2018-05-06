@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Geoloc.Services.Jwt
+namespace Geoloc.Services
 {
     public sealed class JwtTokenFactory
     {
