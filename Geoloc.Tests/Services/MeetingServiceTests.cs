@@ -24,6 +24,7 @@ namespace Geoloc.Tests.Services
         [OneTimeSetUp]
         public void InitialSetup()
         {
+            Mapper.Reset();
             Mapper.Initialize(c => c.AddProfile(new AutoMapperConfiguration()));
         }
 
