@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Geoloc.Data;
 using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
@@ -99,6 +101,37 @@ namespace Geoloc.Tests.Services
 
             // Assert
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void GetAllMeetings_GivenEmptyRepo_ReturnsEmptyList()
+        {
+            // Arrange
+            _repoMock.Setup(x => x.GetAll()).Returns(new List<Meeting>());
+
+            // Act
+            var result = _meetingService.GetAllMeetings();
+
+            // Assert
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        public void GetAllMeetings_ReturnsExpectedNumberOfMeetings()
+        {
+            // Arrange
+            var meetings = new List<Meeting>
+            {
+                new Meeting {Name = "Meeting1"},
+                new Meeting {Name = "Meeting2"}
+            };
+            _repoMock.Setup(x => x.GetAll()).Returns(meetings);
+
+            // Act
+            var result = _meetingService.GetAllMeetings();
+
+            // Assert
+            Assert.AreEqual(2, result.ToList().Count);
         }
     }
 }
