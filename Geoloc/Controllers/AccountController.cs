@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Geoloc.Models.WebModels;
 using Microsoft.AspNetCore.Mvc;
@@ -13,23 +14,25 @@ namespace Geoloc.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public AccountController(IAuthService authService)
+        public AccountController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
         // POST api/account/username
         [HttpPost]
-        public async Task<IActionResult> Username([FromBody] string id)
+        public IActionResult Username([FromBody] Guid id)
         {
-            var username = await _authService.GetUserNameById(id);
-            if (username == null)
+            var user = _userService.GetById(id);
+            if (user == null)
             {
                 return BadRequest();
             }
 
-            return new OkObjectResult(JsonConvert.SerializeObject(username));
+            return new OkObjectResult(JsonConvert.SerializeObject(user.UserName));
         }
 
         // POST api/account/register

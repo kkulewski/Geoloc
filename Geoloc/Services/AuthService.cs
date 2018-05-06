@@ -22,13 +22,6 @@ namespace Geoloc.Services
             _userManager = userManager;
             _tokenFactory = tokenFactory;
         }
-
-        public async Task<string> GetUserNameById(string userId)
-        {
-            var result = await _userManager.FindByIdAsync(userId);
-            var username = result?.UserName;
-            return username;
-        }
         
         public async Task<IdentityResult> Register(RegisterWebModel model)
         {
