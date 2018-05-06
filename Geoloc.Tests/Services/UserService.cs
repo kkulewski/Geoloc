@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
@@ -83,6 +85,25 @@ namespace Geoloc.Tests.Services
 
             // Assert
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetAllUsers_ReturnsExpectedNumberOfUsers()
+        {
+            // Arrange
+            var users = new List<AppUser>
+            {
+                new AppUser(),
+                new AppUser(),
+                new AppUser()
+            };
+            _repoMock.Setup(x => x.GetAll()).Returns(users);
+
+            // Act
+            var result = _userService.GetAllUsers();
+
+            // Assert
+            Assert.AreEqual(3, result.Count());
         }
     }
 }
