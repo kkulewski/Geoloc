@@ -39,7 +39,7 @@ namespace Geoloc.Tests.Services
         public void GetById_GivenExistingId_ReturnsExpectedMeeting()
         {
             // Arrange
-            var id = new Guid();
+            var id = Guid.NewGuid();
             var meeting = new Meeting {Id = id, Name = "Test meeting"};
             _repoMock.Setup(x => x.Get(id)).Returns(meeting);
 
@@ -132,6 +132,41 @@ namespace Geoloc.Tests.Services
 
             // Assert
             Assert.AreEqual(2, result.ToList().Count);
+        }
+
+        [Test]
+        public void JoinMeetingAsUser_GivenValidUserAndMeeting_AddsUserToParticipants()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var meetingId = Guid.NewGuid();
+            var meeting = new Meeting
+            {
+                Id = meetingId,
+                AppUsersInMeeting = new List<AppUserInMeeting>()
+            };
+            _repoMock.Setup(x => x.Get(meetingId)).Returns(meeting);
+
+            // Act
+            _meetingService.JoinMeetingAsUser(userId, meetingId);
+
+            // Assert
+            var hasOneParticipant = meeting.AppUsersInMeeting.Count == 1;
+            var containsUser = meeting.AppUsersInMeeting.Any(x => x.AppUserId == userId);
+            Assert.IsTrue(hasOneParticipant && containsUser);
+        }
+
+        [Test]
+        public void JoinMeetingAsUser_GivenNonExistingMeetingId_ReturnsFalse()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+
+            // Act
+            var result = _meetingService.JoinMeetingAsUser(userId, Guid.NewGuid());
+
+            // Assert
+            Assert.IsFalse(result);
         }
     }
 }
