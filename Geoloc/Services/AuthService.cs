@@ -26,7 +26,7 @@ namespace Geoloc.Services
         public async Task<string> GetUserNameById(string userId)
         {
             var result = await _userManager.FindByIdAsync(userId);
-            var username = result.UserName;
+            var username = result?.UserName;
             return username;
         }
         

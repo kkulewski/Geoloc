@@ -24,6 +24,11 @@ namespace Geoloc.Controllers
         public async Task<IActionResult> Username([FromBody] string id)
         {
             var username = await _authService.GetUserNameById(id);
+            if (username == null)
+            {
+                return BadRequest();
+            }
+
             return new OkObjectResult(JsonConvert.SerializeObject(username));
         }
 
