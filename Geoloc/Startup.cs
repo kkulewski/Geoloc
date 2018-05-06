@@ -5,7 +5,6 @@ using Geoloc.Data.Repositories;
 using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Services;
 using Geoloc.Services.Abstract;
-using Geoloc.Services.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +43,9 @@ namespace Geoloc
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
 
+            services.AddScoped<JwtTokenFactory>();
             services.AddScoped<IAuthService, AuthService>();
+
             var builder = services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequiredLength = 3;
