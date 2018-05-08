@@ -142,5 +142,22 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void SendRelationRequests_GivenExistingRelation_ReturnsFalse()
+        {
+            // Arrange
+            var model = new UserRelationModel
+            {
+                InvitingUser = new UserModel { Id = _john.Id, UserName = _john.UserName },
+                InvitedUser = new UserModel { Id = _kate.Id, UserName = _kate.UserName }
+            };
+
+            // Act
+            var result = _relationService.SendRelationRequest(model);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }
