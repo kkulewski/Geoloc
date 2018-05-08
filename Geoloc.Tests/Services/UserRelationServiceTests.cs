@@ -186,5 +186,15 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsTrue(result);
         }
+
+        [Test]
+        public void AcceptRelationRequest_GivenNonExistingRelationId_ReturnsFalse()
+        {
+            // Act
+            var result = _relationService.AcceptRelationRequest(Guid.NewGuid());
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }
