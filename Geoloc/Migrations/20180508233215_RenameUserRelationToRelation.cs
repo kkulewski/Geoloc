@@ -116,7 +116,7 @@ namespace Geoloc.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_AppUserId",
                 table: "Locations",
-                column: "AppUserId");
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_UserRelations_AspNetUsers_InvitedUserId",

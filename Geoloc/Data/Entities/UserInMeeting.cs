@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Geoloc.Data.Entities
 {
-    public class AppUserInMeeting
+    public class UserInMeeting
     {
         [Key]
-        public Guid AppUserId { get; set; }
+        public Guid UserId { get; set; }
         [Key]
         public Guid MeetingId { get; set; }
-        public AppUser AppUser { get; set; }
+        public User User { get; set; }
         public Meeting Meeting { get; set; }
     }
 }

@@ -244,7 +244,7 @@ namespace Geoloc.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_AppUserId",
                 table: "Locations",
-                column: "AppUserId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Meetings_HostId",
@@ -296,7 +296,7 @@ namespace Geoloc.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_Locations_AspNetUsers_AppUserId",
                 table: "Locations",
-                column: "AppUserId",
+                column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);

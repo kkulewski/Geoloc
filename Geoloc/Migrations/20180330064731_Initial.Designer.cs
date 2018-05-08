@@ -22,7 +22,7 @@ namespace Geoloc.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Geoloc.Data.Entities.AppUser", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -86,7 +86,7 @@ namespace Geoloc.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("AppUserId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -96,7 +96,7 @@ namespace Geoloc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Locations");
                 });
@@ -250,7 +250,7 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Geoloc.Data.Entities.AppUser", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.User", b =>
                 {
                     b.HasOne("Geoloc.Data.Entities.Meeting")
                         .WithMany("AppUsers")
@@ -259,15 +259,15 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Geoloc.Data.Entities.Location", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser", "AppUser")
+                    b.HasOne("Geoloc.Data.Entities.User", "User")
                         .WithMany("Locations")
-                        .HasForeignKey("AppUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser", "Host")
+                    b.HasOne("Geoloc.Data.Entities.User", "Host")
                         .WithMany()
                         .HasForeignKey("HostId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -275,12 +275,12 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser", "InvitedUser")
+                    b.HasOne("Geoloc.Data.Entities.User", "InvitedUser")
                         .WithMany()
                         .HasForeignKey("InvitedUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Geoloc.Data.Entities.AppUser", "InvitingUser")
+                    b.HasOne("Geoloc.Data.Entities.User", "InvitingUser")
                         .WithMany()
                         .HasForeignKey("InvitingUserId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -296,7 +296,7 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -304,7 +304,7 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -317,7 +317,7 @@ namespace Geoloc.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Geoloc.Data.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -325,7 +325,7 @@ namespace Geoloc.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Geoloc.Data.Entities.AppUser")
+                    b.HasOne("Geoloc.Data.Entities.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);

@@ -34,7 +34,7 @@ namespace Geoloc.Migrations
                 newName: "MeetingHostId");
 
             migrationBuilder.CreateTable(
-                name: "AppUserInMeetings",
+                name: "UserInMeetings",
                 columns: table => new
                 {
                     AppUserId = table.Column<Guid>(nullable: false),
@@ -59,14 +59,14 @@ namespace Geoloc.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUserInMeetings_MeetingId",
-                table: "AppUserInMeetings",
+                table: "UserInMeetings",
                 column: "MeetingId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppUserInMeetings");
+                name: "UserInMeetings");
 
             migrationBuilder.RenameColumn(
                 name: "MeetingHostId",

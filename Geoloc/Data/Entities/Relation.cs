@@ -11,8 +11,8 @@ namespace Geoloc.Data.Entities
         public RelationStatus RelationStatus { get; set; }
             
         [ForeignKey("InvitingUserId")]
-        public AppUser InvitingUser { get; set; }
+        public User InvitingUser { get; set; }
         [ForeignKey("InvitedUserId")]
-        public AppUser InvitedUser { get; set; }
+        public User InvitedUser { get; set; }
     }
 }

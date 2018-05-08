@@ -6,26 +6,26 @@ using Geoloc.Data.Repositories.Abstract;
 
 namespace Geoloc.Data.Repositories
 {
-    public class AppUserRepository : IAppUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public AppUserRepository(ApplicationDbContext context)
+        public UserRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public AppUser Get(Guid id)
+        public User Get(Guid id)
         {
             return _context.Users.SingleOrDefault(user => user.Id == id);
         }
 
-        public AppUser Get(string userName)
+        public User Get(string userName)
         {
             return _context.Users.SingleOrDefault(user => user.UserName == userName);
         }
 
-        public IEnumerable<AppUser> GetAll()
+        public IEnumerable<User> GetAll()
         {
             return _context.Users;
         }

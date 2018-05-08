@@ -13,10 +13,10 @@ namespace Geoloc.Services
     public class AuthService : IAuthService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly JwtTokenFactory _tokenFactory;
 
-        public AuthService(IUnitOfWork unitOfWork, UserManager<AppUser> userManager, JwtTokenFactory tokenFactory)
+        public AuthService(IUnitOfWork unitOfWork, UserManager<User> userManager, JwtTokenFactory tokenFactory)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
@@ -25,7 +25,7 @@ namespace Geoloc.Services
         
         public async Task<IdentityResult> Register(RegisterWebModel model)
         {
-            var user = Mapper.Map<AppUser>(model);
+            var user = Mapper.Map<User>(model);
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -54,7 +54,7 @@ namespace Geoloc.Services
                 .Build();
         }
 
-        private async Task<AppUser> GetUser(LoginWebModel model)
+        private async Task<User> GetUser(LoginWebModel model)
         {
             var invalidModel = string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password);
             if (invalidModel)

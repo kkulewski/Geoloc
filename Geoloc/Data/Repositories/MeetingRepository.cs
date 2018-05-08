@@ -20,7 +20,7 @@ namespace Geoloc.Data.Repositories
         {
             return _context.Meetings
                 .Include(x => x.AppUsersInMeeting)
-                .ThenInclude(x => x.AppUser)
+                .ThenInclude(x => x.User)
                 .FirstOrDefault(x => x.Id == id);
         }
 
@@ -33,7 +33,7 @@ namespace Geoloc.Data.Repositories
         {
             return _context.Meetings
                 .Include(x => x.AppUsersInMeeting)
-                .ThenInclude(x => x.AppUser);
+                .ThenInclude(x => x.User);
         }
     }
 }

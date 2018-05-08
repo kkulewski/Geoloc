@@ -15,6 +15,6 @@ namespace Geoloc.Data.Entities
         public string Description { get; set; }
         public Guid MeetingHostId { get; set; }
 
-        public virtual ICollection<AppUserInMeeting> AppUsersInMeeting { get; set; }
+        public virtual ICollection<UserInMeeting> AppUsersInMeeting { get; set; }
     }
 }

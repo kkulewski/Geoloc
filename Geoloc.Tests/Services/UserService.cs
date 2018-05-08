@@ -14,7 +14,7 @@ namespace Geoloc.Tests.Services
     [TestFixture]
     public class UserService
     {
-        private Mock<IAppUserRepository> _repoMock;
+        private Mock<IUserRepository> _repoMock;
         private IUserService _userService;
 
         [OneTimeSetUp]
@@ -27,7 +27,7 @@ namespace Geoloc.Tests.Services
         [SetUp]
         public void Setup()
         {
-            _repoMock = new Mock<IAppUserRepository>();
+            _repoMock = new Mock<IUserRepository>();
             _userService = new Geoloc.Services.UserService(_repoMock.Object);
         }
 
@@ -36,7 +36,7 @@ namespace Geoloc.Tests.Services
         {
             // Arrange
             var userId = Guid.NewGuid();
-            var user = new AppUser {Id = userId, UserName = "TestUser"};
+            var user = new User {Id = userId, UserName = "TestUser"};
             _repoMock.Setup(x => x.Get(userId)).Returns(user);
 
             // Act
@@ -50,7 +50,7 @@ namespace Geoloc.Tests.Services
         public void GetById_GivenNonExistingId_ReturnsNull()
         {
             // Arrange
-            _repoMock.Setup(x => x.Get(It.IsAny<Guid>())).Returns((AppUser) null);
+            _repoMock.Setup(x => x.Get(It.IsAny<Guid>())).Returns((User) null);
 
             // Act
             var result = _userService.GetById(Guid.NewGuid());
@@ -64,7 +64,7 @@ namespace Geoloc.Tests.Services
         {
             // Arrange
             const string userName = "TestUser";
-            var user = new AppUser { UserName = "TestUser" };
+            var user = new User { UserName = "TestUser" };
             _repoMock.Setup(x => x.Get(userName)).Returns(user);
 
             // Act
@@ -78,7 +78,7 @@ namespace Geoloc.Tests.Services
         public void GetByUserName_GivenNonExistingName_ReturnsNull()
         {
             // Arrange
-            _repoMock.Setup(x => x.Get(It.IsAny<string>())).Returns((AppUser)null);
+            _repoMock.Setup(x => x.Get(It.IsAny<string>())).Returns((User)null);
 
             // Act
             var result = _userService.GetByUserName("abc");
@@ -91,11 +91,11 @@ namespace Geoloc.Tests.Services
         public void GetAllUsers_ReturnsExpectedNumberOfUsers()
         {
             // Arrange
-            var users = new List<AppUser>
+            var users = new List<User>
             {
-                new AppUser(),
-                new AppUser(),
-                new AppUser()
+                new User(),
+                new User(),
+                new User()
             };
             _repoMock.Setup(x => x.GetAll()).Returns(users);
 

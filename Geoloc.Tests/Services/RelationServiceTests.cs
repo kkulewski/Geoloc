@@ -21,13 +21,13 @@ namespace Geoloc.Tests.Services
         private Mock<IRelationRepository> _repoMock;
         private IRelationService _relationService;
 
-        private AppUser _john;
-        private AppUser _kate;
-        private AppUser _dave;
-        private AppUser _eric;
-        private AppUser _matt;
-        private AppUser _alex;
-        private AppUser _anne;
+        private User _john;
+        private User _kate;
+        private User _dave;
+        private User _eric;
+        private User _matt;
+        private User _alex;
+        private User _anne;
 
         [OneTimeSetUp]
         public void InitialSetup()
@@ -43,13 +43,13 @@ namespace Geoloc.Tests.Services
             _repoMock = new Mock<IRelationRepository>();
             _relationService = new RelationService(_uowMock.Object, _repoMock.Object);
 
-            _john = new AppUser { Id = Guid.NewGuid(), UserName = "john@test.com" };
-            _kate = new AppUser { Id = Guid.NewGuid(), UserName = "kate@test.com" };
-            _dave = new AppUser { Id = Guid.NewGuid(), UserName = "dave@test.com" };
-            _eric = new AppUser { Id = Guid.NewGuid(), UserName = "eric@test.com" };
-            _matt = new AppUser { Id = Guid.NewGuid(), UserName = "matt@test.com" };
-            _alex = new AppUser { Id = Guid.NewGuid(), UserName = "alex@test.com" };
-            _anne = new AppUser { Id = Guid.NewGuid(), UserName = "anne@test.com" };
+            _john = new User { Id = Guid.NewGuid(), UserName = "john@test.com" };
+            _kate = new User { Id = Guid.NewGuid(), UserName = "kate@test.com" };
+            _dave = new User { Id = Guid.NewGuid(), UserName = "dave@test.com" };
+            _eric = new User { Id = Guid.NewGuid(), UserName = "eric@test.com" };
+            _matt = new User { Id = Guid.NewGuid(), UserName = "matt@test.com" };
+            _alex = new User { Id = Guid.NewGuid(), UserName = "alex@test.com" };
+            _anne = new User { Id = Guid.NewGuid(), UserName = "anne@test.com" };
 
             IList<Relation> relations = new List<Relation>
             {

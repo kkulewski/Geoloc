@@ -11,7 +11,7 @@ namespace Geoloc.Infrastructure
         {
             #region User
 
-            CreateMap<RegisterWebModel, AppUser>()
+            CreateMap<RegisterWebModel, User>()
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.Email))
                 .ForMember(x => x.Email, o => o.MapFrom(s => s.Email))
                 .ForAllOtherMembers(o => o.Ignore());
@@ -59,29 +59,29 @@ namespace Geoloc.Infrastructure
 
             #region UserModel
 
-            CreateMap<UserModel, AppUser>()
+            CreateMap<UserModel, User>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.UserName))
                 .ForMember(x => x.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(x => x.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            CreateMap<AppUser, UserModel>()
+            CreateMap<User, UserModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.UserName, o => o.MapFrom(s => s.UserName))
                 .ForMember(x => x.LastName, o => o.MapFrom(s => s.LastName))
                 .ForMember(x => x.FirstName, o => o.MapFrom(s => s.FirstName))
                 .ForAllOtherMembers(o => o.Ignore());
 
-            CreateMap<UserModel, AppUserInMeeting>()
-                .ForMember(x => x.AppUser, o => o.MapFrom(s => s))
+            CreateMap<UserModel, UserInMeeting>()
+                .ForMember(x => x.User, o => o.MapFrom(s => s))
                 .ForAllOtherMembers(x => x.Ignore());
 
-            CreateMap<AppUserInMeeting, UserModel>()
-                .ForMember(x => x.Id, o => o.MapFrom(s => s.AppUser.Id))
-                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.AppUser.FirstName))
-                .ForMember(x => x.LastName, o => o.MapFrom(s => s.AppUser.LastName))
-                .ForMember(x => x.UserName, o => o.MapFrom(s => s.AppUser.UserName));
+            CreateMap<UserInMeeting, UserModel>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.User.Id))
+                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.User.FirstName))
+                .ForMember(x => x.LastName, o => o.MapFrom(s => s.User.LastName))
+                .ForMember(x => x.UserName, o => o.MapFrom(s => s.User.UserName));
 
             #endregion
 
@@ -95,14 +95,14 @@ namespace Geoloc.Infrastructure
 
             #endregion
 
-            #region AppUserInMeeting
+            #region UserInMeeting
 
-            CreateMap<AppUserInMeeting, AppUser>()
-                .ForMember(x => x.Id, o => o.MapFrom(s => s.AppUser.Id))
-                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.AppUser.FirstName))
-                .ForMember(x => x.LastName, o => o.MapFrom(s => s.AppUser.LastName))
-                .ForMember(x => x.UserName, o => o.MapFrom(s => s.AppUser.UserName))
-                .ForMember(x => x.Email, o => o.MapFrom(s => s.AppUser.Email))
+            CreateMap<UserInMeeting, User>()
+                .ForMember(x => x.Id, o => o.MapFrom(s => s.User.Id))
+                .ForMember(x => x.FirstName, o => o.MapFrom(s => s.User.FirstName))
+                .ForMember(x => x.LastName, o => o.MapFrom(s => s.User.LastName))
+                .ForMember(x => x.UserName, o => o.MapFrom(s => s.User.UserName))
+                .ForMember(x => x.Email, o => o.MapFrom(s => s.User.Email))
                 .ForAllOtherMembers(x => x.Ignore());
 
             #endregion
