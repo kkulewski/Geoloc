@@ -224,5 +224,15 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsTrue(result);
         }
+
+        [Test]
+        public void GetUserRelationById_GivenNonExistingRelation_ReturnsNull()
+        {
+            // Act
+            var result = _relationService.GetUserRelationById(Guid.NewGuid());
+
+            // Assert
+            Assert.IsNull(result);
+        }
     }
 }
