@@ -226,13 +226,28 @@ namespace Geoloc.Tests.Services
         }
 
         [Test]
-        public void GetUserRelationById_GivenNonExistingRelation_ReturnsNull()
+        public void GetUserRelationById_GivenNonExistingRelationId_ReturnsNull()
         {
             // Act
             var result = _relationService.GetUserRelationById(Guid.NewGuid());
 
             // Assert
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public void GetUserRelationById_GivenExistingRelationId_ReturnsExpectedRelation()
+        {
+            // Arrange
+            var relationId = Guid.NewGuid();
+            var relation = new UserRelation { Id = relationId };
+            _repoMock.Setup(x => x.GetUserRelationById(It.IsAny<Guid>())).Returns(relation);
+
+            // Act
+            var result = _relationService.GetUserRelationById(Guid.NewGuid());
+
+            // Assert
+            Assert.AreEqual(relationId, result.Id);
         }
     }
 }
