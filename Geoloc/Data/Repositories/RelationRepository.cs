@@ -7,39 +7,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Geoloc.Data.Repositories
 {
-    class UserRelationRepository : IUserRelationRepository
+    class RelationRepository : IRelationRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public UserRelationRepository(ApplicationDbContext context)
+        public RelationRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<UserRelation> GetUserRelationsByUser(Guid userId)
+        public IEnumerable<Relation> GetRelationsByUserId(Guid userId)
         {
-            return _context.UserRelations
+            return _context.Relations
                 .Include(x => x.InvitingUser)
                 .Include(x => x.InvitedUser)
                 .Where(x => x.InvitingUserId == userId || x.InvitedUserId == userId);
         }
 
-        public UserRelation GetUserRelationById(Guid relationId)
+        public Relation GetRelationById(Guid relationId)
         {
-            return _context.UserRelations
+            return _context.Relations
                 .Include(x => x.InvitingUser)
                 .Include(x => x.InvitedUser)
                 .FirstOrDefault(x => x.Id == relationId);
         }
 
-        public void Add(UserRelation model)
+        public void Add(Relation model)
         {
-            _context.UserRelations.Add(model);
+            _context.Relations.Add(model);
         }
 
-        public void Update(UserRelation model)
+        public void Update(Relation model)
         {
-            _context.UserRelations.Update(model);
+            _context.Relations.Update(model);
         }
     }
 }

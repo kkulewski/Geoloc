@@ -15,11 +15,11 @@ using NUnit.Framework;
 namespace Geoloc.Tests.Services
 {
     [TestFixture]
-    public class UserRelationServiceTests
+    public class RelationServiceTests
     {
         private Mock<IUnitOfWork> _uowMock;
-        private Mock<IUserRelationRepository> _repoMock;
-        private IUserRelationService _relationService;
+        private Mock<IRelationRepository> _repoMock;
+        private IRelationService _relationService;
 
         private AppUser _john;
         private AppUser _kate;
@@ -40,8 +40,8 @@ namespace Geoloc.Tests.Services
         public void Setup()
         {
             _uowMock = new Mock<IUnitOfWork>();
-            _repoMock = new Mock<IUserRelationRepository>();
-            _relationService = new UserRelationService(_uowMock.Object, _repoMock.Object);
+            _repoMock = new Mock<IRelationRepository>();
+            _relationService = new RelationService(_uowMock.Object, _repoMock.Object);
 
             _john = new AppUser { Id = Guid.NewGuid(), UserName = "john@test.com" };
             _kate = new AppUser { Id = Guid.NewGuid(), UserName = "kate@test.com" };
@@ -51,41 +51,41 @@ namespace Geoloc.Tests.Services
             _alex = new AppUser { Id = Guid.NewGuid(), UserName = "alex@test.com" };
             _anne = new AppUser { Id = Guid.NewGuid(), UserName = "anne@test.com" };
 
-            IList<UserRelation> relations = new List<UserRelation>
+            IList<Relation> relations = new List<Relation>
             {
-                new UserRelation
+                new Relation
                 {
                     InvitingUser = _john,
                     InvitedUser = _kate,
-                    UserRelationStatus = UserRelationStatus.Accepted
+                    RelationStatus = RelationStatus.Accepted
                 },
-                new UserRelation
+                new Relation
                 {
                     InvitingUser = _dave,
                     InvitedUser = _john,
-                    UserRelationStatus = UserRelationStatus.Accepted
+                    RelationStatus = RelationStatus.Accepted
                 },
-                new UserRelation
+                new Relation
                 {
                     InvitingUser = _john,
                     InvitedUser = _eric,
-                    UserRelationStatus = UserRelationStatus.Pending
+                    RelationStatus = RelationStatus.Pending
                 },
-                new UserRelation
+                new Relation
                 {
                     InvitingUser = _matt,
                     InvitedUser = _john,
-                    UserRelationStatus = UserRelationStatus.Pending
+                    RelationStatus = RelationStatus.Pending
                 },
-                new UserRelation
+                new Relation
                 {
                     InvitingUser = _alex,
                     InvitedUser = _john,
-                    UserRelationStatus = UserRelationStatus.Pending
+                    RelationStatus = RelationStatus.Pending
                 }
             };
 
-            _repoMock.Setup(x => x.GetUserRelationsByUser(_john.Id)).Returns(relations);
+            _repoMock.Setup(x => x.GetRelationsByUserId(_john.Id)).Returns(relations);
         }
 
         [Test]
@@ -127,124 +127,124 @@ namespace Geoloc.Tests.Services
         }
 
         [Test]
-        public void SendRelationRequests_GivenSelfInvitation_ReturnsFalse()
+        public void SendRequests_GivenSelfInvitation_ReturnsFalse()
         {
             // Arrange
-            var model = new UserRelationModel
+            var model = new RelationModel
             {
                 InvitingUser = new UserModel {Id = _john.Id, UserName = _john.UserName},
                 InvitedUser = new UserModel {Id = _john.Id, UserName = _john.UserName}
             };
 
             // Act
-            var result = _relationService.SendRelationRequest(model);
+            var result = _relationService.SendRequest(model);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void SendRelationRequests_GivenExistingRelation_ReturnsFalse()
+        public void SendRequests_GivenExistingRelation_ReturnsFalse()
         {
             // Arrange
-            var model = new UserRelationModel
+            var model = new RelationModel
             {
                 InvitingUser = new UserModel { Id = _john.Id, UserName = _john.UserName },
                 InvitedUser = new UserModel { Id = _kate.Id, UserName = _kate.UserName }
             };
 
             // Act
-            var result = _relationService.SendRelationRequest(model);
+            var result = _relationService.SendRequest(model);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void SendRelationRequests_GivenNull_ReturnsFalse()
+        public void SendRequests_GivenNull_ReturnsFalse()
         {
             // Act
-            var result = _relationService.SendRelationRequest(null);
+            var result = _relationService.SendRequest(null);
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void SendRelationRequests_GivenValidModel_ReturnsTrue()
+        public void SendRequests_GivenValidModel_ReturnsTrue()
         {
             // Arrange
-            var model = new UserRelationModel
+            var model = new RelationModel
             {
                 InvitingUser = new UserModel { Id = _john.Id, UserName = _john.UserName },
                 InvitedUser = new UserModel { Id = _anne.Id, UserName = _anne.UserName }
             };
 
             // Act
-            var result = _relationService.SendRelationRequest(model);
+            var result = _relationService.SendRequest(model);
 
             // Assert
             Assert.IsTrue(result);
         }
 
         [Test]
-        public void AcceptRelationRequest_GivenNonExistingRelationId_ReturnsFalse()
+        public void AcceptRequest_GivenNonExistingRelationId_ReturnsFalse()
         {
             // Act
-            var result = _relationService.AcceptRelationRequest(Guid.NewGuid());
+            var result = _relationService.AcceptRequest(Guid.NewGuid());
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void AcceptRelationRequest_GivenAcceptedRelationId_ReturnsFalse()
+        public void AcceptRequest_GivenAcceptedRelationId_ReturnsFalse()
         {
             // Arrange
-            var relation = new UserRelation { UserRelationStatus = UserRelationStatus.Accepted};
-            _repoMock.Setup(x => x.GetUserRelationById(It.IsAny<Guid>())).Returns(relation);
+            var relation = new Relation { RelationStatus = RelationStatus.Accepted};
+            _repoMock.Setup(x => x.GetRelationById(It.IsAny<Guid>())).Returns(relation);
 
             // Act
-            var result = _relationService.AcceptRelationRequest(Guid.NewGuid());
+            var result = _relationService.AcceptRequest(Guid.NewGuid());
 
             // Assert
             Assert.IsFalse(result);
         }
 
         [Test]
-        public void AcceptRelationRequest_GivenPendingRelationId_ReturnsTrue()
+        public void AcceptRequest_GivenPendingRelationId_ReturnsTrue()
         {
             // Arrange
-            var relation = new UserRelation { UserRelationStatus = UserRelationStatus.Pending };
-            _repoMock.Setup(x => x.GetUserRelationById(It.IsAny<Guid>())).Returns(relation);
+            var relation = new Relation { RelationStatus = RelationStatus.Pending };
+            _repoMock.Setup(x => x.GetRelationById(It.IsAny<Guid>())).Returns(relation);
 
             // Act
-            var result = _relationService.AcceptRelationRequest(Guid.NewGuid());
+            var result = _relationService.AcceptRequest(Guid.NewGuid());
 
             // Assert
             Assert.IsTrue(result);
         }
 
         [Test]
-        public void GetUserRelationById_GivenNonExistingRelationId_ReturnsNull()
+        public void GetRelationById_GivenNonExistingRelationId_ReturnsNull()
         {
             // Act
-            var result = _relationService.GetUserRelationById(Guid.NewGuid());
+            var result = _relationService.GetRelationById(Guid.NewGuid());
 
             // Assert
             Assert.IsNull(result);
         }
 
         [Test]
-        public void GetUserRelationById_GivenExistingRelationId_ReturnsExpectedRelation()
+        public void GetRelationById_GivenExistingRelationId_ReturnsExpectedRelation()
         {
             // Arrange
             var relationId = Guid.NewGuid();
-            var relation = new UserRelation { Id = relationId };
-            _repoMock.Setup(x => x.GetUserRelationById(It.IsAny<Guid>())).Returns(relation);
+            var relation = new Relation { Id = relationId };
+            _repoMock.Setup(x => x.GetRelationById(It.IsAny<Guid>())).Returns(relation);
 
             // Act
-            var result = _relationService.GetUserRelationById(Guid.NewGuid());
+            var result = _relationService.GetRelationById(Guid.NewGuid());
 
             // Assert
             Assert.AreEqual(relationId, result.Id);

@@ -12,43 +12,43 @@ using Newtonsoft.Json;
 namespace Geoloc.Controllers
 {
     [Route("api/[controller]"), Authorize]
-    public class UserRelationController : Controller
+    public class RelationController : Controller
     {
-        private readonly IUserRelationService _userRelationService;
+        private readonly IRelationService _relationService;
         private readonly IUserService _userService;
 
-        public UserRelationController(IUserRelationService userRelationService, IUserService userService)
+        public RelationController(IRelationService relationService, IUserService userService)
         {
-            _userRelationService = userRelationService;
+            _relationService = relationService;
             _userService = userService;
         }
 
         [HttpGet("{userId}")]
-        public IEnumerable<UserRelationWebModel> Relations(Guid userId)
+        public IEnumerable<RelationWebModel> Relations(Guid userId)
         {
-            var model = _userRelationService.GetUserRelations(userId);
-            var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
+            var model = _relationService.GetUserRelations(userId);
+            var result = Mapper.Map<IEnumerable<RelationWebModel>>(model);
             return result;
         }
 
         [HttpGet("sent/{userId}")]
-        public IEnumerable<UserRelationWebModel> GetSentRequests(Guid userId)
+        public IEnumerable<RelationWebModel> GetSentRequests(Guid userId)
         {
-            var model = _userRelationService.GetUserSentRequests(userId);
-            var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
+            var model = _relationService.GetUserSentRequests(userId);
+            var result = Mapper.Map<IEnumerable<RelationWebModel>>(model);
             return result;
         }
 
         [HttpGet("received/{userId}")]
-        public IEnumerable<UserRelationWebModel> GetReceivedRelations(Guid userId)
+        public IEnumerable<RelationWebModel> GetReceivedRequests(Guid userId)
         {
-            var model = _userRelationService.GetUserReceivedRequests(userId);
-            var result = Mapper.Map<IEnumerable<UserRelationWebModel>>(model);
+            var model = _relationService.GetUserReceivedRequests(userId);
+            var result = Mapper.Map<IEnumerable<RelationWebModel>>(model);
             return result;
         }
 
         [HttpPost("[action]")]
-        public IActionResult Send([FromBody] UserRelationWebModel webModel)
+        public IActionResult Send([FromBody] RelationWebModel webModel)
         {
             if (!ModelState.IsValid)
             {
@@ -67,14 +67,14 @@ namespace Geoloc.Controllers
                 return BadRequest();
             }
 
-            var model = new UserRelationModel
+            var model = new RelationModel
             {
-                UserRelationStatus = UserRelationStatus.Pending,
+                RelationStatus = RelationStatus.Pending,
                 InvitingUser = invitingUser,
                 InvitedUser = invitedUser
             };
 
-            var isSuccess = _userRelationService.SendRelationRequest(model);
+            var isSuccess = _relationService.SendRequest(model);
             if (!isSuccess)
             {
                 return BadRequest();
@@ -86,13 +86,13 @@ namespace Geoloc.Controllers
         [HttpPost("[action]")]
         public IActionResult Accept([FromBody] Guid id)
         {
-            var model = _userRelationService.GetUserRelationById(id);
+            var model = _relationService.GetRelationById(id);
             if (model == null)
             {
                 return BadRequest();
             }
 
-            var isSuccess = _userRelationService.AcceptRelationRequest(id);
+            var isSuccess = _relationService.AcceptRequest(id);
             if (!isSuccess)
             {
                 return BadRequest();

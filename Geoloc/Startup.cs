@@ -37,13 +37,13 @@ namespace Geoloc
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppUserRepository, AppUserRepository>();
 
-            services.AddScoped<IUserRelationService, UserRelationService>();
-            services.AddScoped<IUserRelationRepository, UserRelationRepository>();
+            services.AddScoped<IRelationService, RelationService>();
+            services.AddScoped<IRelationRepository, RelationRepository>();
             
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
 
-            services.AddScoped<JwtTokenFactory>();
+            services.AddSingleton<JwtTokenFactory>();
             services.AddScoped<IAuthService, AuthService>();
 
             var builder = services.AddIdentityCore<AppUser>(opt =>

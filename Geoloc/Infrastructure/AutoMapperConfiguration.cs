@@ -18,20 +18,20 @@ namespace Geoloc.Infrastructure
 
             #endregion
 
-            #region UserRelation
+            #region Relation
 
-            CreateMap<UserRelation, UserRelationModel>()
+            CreateMap<Relation, RelationModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.InvitingUser, o => o.MapFrom(s => s.InvitingUser))
                 .ForMember(x => x.InvitedUser, o => o.MapFrom(s => s.InvitedUser))
-                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus))
+                .ForMember(x => x.RelationStatus, o => o.MapFrom(s => s.RelationStatus))
                 .ForAllOtherMembers(o => o.Ignore());
 
-            CreateMap<UserRelationModel, UserRelationWebModel>()
+            CreateMap<RelationModel, RelationWebModel>()
                 .ForMember(x => x.Id, o => o.MapFrom(s => s.Id))
                 .ForMember(x => x.InvitingUserId, o => o.MapFrom(s => s.InvitingUser.Id))
                 .ForMember(x => x.InvitedUserId, o => o.MapFrom(s => s.InvitedUser.Id))
-                .ForMember(x => x.UserRelationStatus, o => o.MapFrom(s => s.UserRelationStatus))
+                .ForMember(x => x.RelationStatus, o => o.MapFrom(s => s.RelationStatus))
                 .ForMember(x => x.InvitingUserName, o => o.MapFrom(s => s.InvitingUser.UserName))
                 .ForMember(x => x.InvitedUserName, o => o.MapFrom(s => s.InvitedUser.UserName));
 

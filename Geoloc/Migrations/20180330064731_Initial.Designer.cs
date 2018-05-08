@@ -125,7 +125,7 @@ namespace Geoloc.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("Geoloc.Data.Entities.UserRelation", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -134,7 +134,7 @@ namespace Geoloc.Migrations
 
                     b.Property<Guid>("InvitingUserId");
 
-                    b.Property<int>("UserRelationStatus");
+                    b.Property<int>("RelationStatus");
 
                     b.HasKey("Id");
 
@@ -273,7 +273,7 @@ namespace Geoloc.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("Geoloc.Data.Entities.UserRelation", b =>
+            modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
                 {
                     b.HasOne("Geoloc.Data.Entities.AppUser", "InvitedUser")
                         .WithMany()

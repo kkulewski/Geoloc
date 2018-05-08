@@ -2,7 +2,7 @@
 
 namespace Geoloc.Models.WebModels
 {
-    public class UserRelationWebModel
+    public class RelationWebModel
     {
         public Guid Id { get; set; }
 
@@ -10,7 +10,7 @@ namespace Geoloc.Models.WebModels
 
         public Guid InvitedUserId { get; set; }
 
-        public string UserRelationStatus { get; set; }
+        public string RelationStatus { get; set; }
 
         public string InvitingUserName { get; set; }
 

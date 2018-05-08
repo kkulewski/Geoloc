@@ -1,6 +1,6 @@
 ﻿namespace Geoloc.Data.Entities
 {
-    public enum UserRelationStatus
+    public enum RelationStatus
     {
         Pending,
         Accepted,

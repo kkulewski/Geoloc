@@ -12,7 +12,7 @@ namespace Geoloc.Data
         }
 
         public DbSet<Meeting> Meetings { get; set; }
-        public DbSet<UserRelation> UserRelations { get; set; }
+        public DbSet<Relation> Relations { get; set; }
         public DbSet<AppUserInMeeting> AppUserInMeetings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
