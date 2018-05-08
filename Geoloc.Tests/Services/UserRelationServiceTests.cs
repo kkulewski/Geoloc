@@ -25,6 +25,7 @@ namespace Geoloc.Tests.Services
         private AppUser _dave;
         private AppUser _eric;
         private AppUser _matt;
+        private AppUser _alex;
         private AppUser _anne;
 
         [OneTimeSetUp]
@@ -46,6 +47,7 @@ namespace Geoloc.Tests.Services
             _dave = new AppUser { Id = Guid.NewGuid(), UserName = "dave@test.com" };
             _eric = new AppUser { Id = Guid.NewGuid(), UserName = "eric@test.com" };
             _matt = new AppUser { Id = Guid.NewGuid(), UserName = "matt@test.com" };
+            _alex = new AppUser { Id = Guid.NewGuid(), UserName = "alex@test.com" };
             _anne = new AppUser { Id = Guid.NewGuid(), UserName = "anne@test.com" };
 
             IList<UserRelation> relations = new List<UserRelation>
@@ -73,6 +75,12 @@ namespace Geoloc.Tests.Services
                     InvitingUser = _matt,
                     InvitedUser = _john,
                     UserRelationStatus = UserRelationStatus.Pending
+                },
+                new UserRelation
+                {
+                    InvitingUser = _alex,
+                    InvitedUser = _john,
+                    UserRelationStatus = UserRelationStatus.Pending
                 }
             };
 
@@ -89,6 +97,19 @@ namespace Geoloc.Tests.Services
             bool containsEric = relations.Any(x => x.InvitedUser.UserName == _eric.UserName);
             bool containsOneRelation = relations.Count == 1;
             Assert.IsTrue(containsOneRelation && containsEric);
+        }
+
+        [Test]
+        public void GetUserReceivedRequests_ReturnsExpectedRelations()
+        {
+            // Act
+            var relations = _relationService.GetUserReceivedRequests(_john.Id).ToList();
+
+            // Assert
+            bool containsMatt = relations.Any(x => x.InvitingUser.UserName == _matt.UserName);
+            bool containsAlex = relations.Any(x => x.InvitingUser.UserName == _alex.UserName);
+            bool containsTwoRelations = relations.Count == 2;
+            Assert.IsTrue(containsTwoRelations && containsMatt && containsAlex);
         }
     }
 }
