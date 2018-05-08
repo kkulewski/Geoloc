@@ -6,6 +6,7 @@ using Geoloc.Data;
 using Geoloc.Data.Entities;
 using Geoloc.Data.Repositories.Abstract;
 using Geoloc.Infrastructure;
+using Geoloc.Models;
 using Geoloc.Services;
 using Geoloc.Services.Abstract;
 using Moq;
@@ -123,6 +124,23 @@ namespace Geoloc.Tests.Services
             bool containsDave = relations.Any(x => x.InvitingUser.UserName == _dave.UserName);
             bool containsTwoRelations = relations.Count == 2;
             Assert.IsTrue(containsTwoRelations && containsKate && containsDave);
+        }
+
+        [Test]
+        public void SendRelationRequests_GivenSelfInvitation_ReturnsFalse()
+        {
+            // Arrange
+            var model = new UserRelationModel
+            {
+                InvitingUser = new UserModel {Id = _john.Id, UserName = _john.UserName},
+                InvitedUser = new UserModel {Id = _john.Id, UserName = _john.UserName}
+            };
+
+            // Act
+            var result = _relationService.SendRelationRequest(model);
+
+            // Assert
+            Assert.IsFalse(result);
         }
     }
 }
