@@ -161,6 +161,16 @@ namespace Geoloc.Tests.Services
         }
 
         [Test]
+        public void SendRelationRequests_GivenNull_ReturnsFalse()
+        {
+            // Act
+            var result = _relationService.SendRelationRequest(null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [Test]
         public void SendRelationRequests_GivenValidModel_ReturnsTrue()
         {
             // Arrange
