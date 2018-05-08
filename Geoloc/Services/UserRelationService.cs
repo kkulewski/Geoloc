@@ -40,13 +40,13 @@ namespace Geoloc.Services
                 }
 
                 var relation = Mapper.Map<UserRelation>(model);
+                relation.UserRelationStatus = UserRelationStatus.Pending;
                 _userRelationRepository.Add(relation);
                 _unitOfWork.Save();
                 return true;
             }
             catch (Exception)
             {
-                // TODO: error handling
                 return false;
             }
         }
@@ -56,6 +56,11 @@ namespace Geoloc.Services
             try
             {
                 var relation = _userRelationRepository.GetUserRelationById(relationId);
+                if (relation.UserRelationStatus != UserRelationStatus.Pending)
+                {
+                    return false;
+                }
+
                 relation.UserRelationStatus = UserRelationStatus.Accepted;
                 _userRelationRepository.Update(relation);
                 _unitOfWork.Save();
@@ -63,7 +68,6 @@ namespace Geoloc.Services
             }
             catch (Exception)
             {
-                // TODO: error handling
                 return false;
             }
         }
@@ -89,8 +93,8 @@ namespace Geoloc.Services
                 var relations = _userRelationRepository
                     .GetUserRelationsByUser(userId)
                     .ToList()
-                    .Where(x => (x.InvitingUserId == userId && x.UserRelationStatus == UserRelationStatus.Accepted) ||
-                                (x.InvitedUserId == userId && x.UserRelationStatus == UserRelationStatus.Accepted));
+                    .Where(x => (x.InvitingUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Accepted) ||
+                                (x.InvitedUser.Id == userId && x.UserRelationStatus == UserRelationStatus.Accepted));
 
                 var result = Mapper.Map<IEnumerable<UserRelationModel>>(relations);
                 return result;
