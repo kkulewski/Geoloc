@@ -159,5 +159,22 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void SendRelationRequests_GivenValidModel_ReturnsTrue()
+        {
+            // Arrange
+            var model = new UserRelationModel
+            {
+                InvitingUser = new UserModel { Id = _john.Id, UserName = _john.UserName },
+                InvitedUser = new UserModel { Id = _anne.Id, UserName = _anne.UserName }
+            };
+
+            // Act
+            var result = _relationService.SendRelationRequest(model);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
     }
 }

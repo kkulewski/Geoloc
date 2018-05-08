@@ -40,6 +40,7 @@ namespace Geoloc.Services
                 }
 
                 var relation = Mapper.Map<UserRelation>(model);
+                relation.UserRelationStatus = UserRelationStatus.Pending;
                 _userRelationRepository.Add(relation);
                 _unitOfWork.Save();
                 return true;
