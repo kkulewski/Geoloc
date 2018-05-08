@@ -47,7 +47,6 @@ namespace Geoloc.Services
             }
             catch (Exception)
             {
-                // TODO: error handling
                 return false;
             }
         }
@@ -57,7 +56,7 @@ namespace Geoloc.Services
             try
             {
                 var relation = _userRelationRepository.GetUserRelationById(relationId);
-                if (relation.UserRelationStatus == UserRelationStatus.Accepted)
+                if (relation.UserRelationStatus != UserRelationStatus.Pending)
                 {
                     return false;
                 }
@@ -69,7 +68,6 @@ namespace Geoloc.Services
             }
             catch (Exception)
             {
-                // TODO: error handling
                 return false;
             }
         }

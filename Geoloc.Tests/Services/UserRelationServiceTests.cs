@@ -210,5 +210,19 @@ namespace Geoloc.Tests.Services
             // Assert
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public void AcceptRelationRequest_GivenPendingRelationId_ReturnsTrue()
+        {
+            // Arrange
+            var relation = new UserRelation { UserRelationStatus = UserRelationStatus.Pending };
+            _repoMock.Setup(x => x.GetUserRelationById(It.IsAny<Guid>())).Returns(relation);
+
+            // Act
+            var result = _relationService.AcceptRelationRequest(Guid.NewGuid());
+
+            // Assert
+            Assert.IsTrue(result);
+        }
     }
 }
