@@ -57,6 +57,11 @@ namespace Geoloc.Services
             try
             {
                 var relation = _userRelationRepository.GetUserRelationById(relationId);
+                if (relation.UserRelationStatus == UserRelationStatus.Accepted)
+                {
+                    return false;
+                }
+
                 relation.UserRelationStatus = UserRelationStatus.Accepted;
                 _userRelationRepository.Update(relation);
                 _unitOfWork.Save();
