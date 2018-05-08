@@ -111,5 +111,18 @@ namespace Geoloc.Tests.Services
             bool containsTwoRelations = relations.Count == 2;
             Assert.IsTrue(containsTwoRelations && containsMatt && containsAlex);
         }
+
+        [Test]
+        public void GetUserRelations_ReturnsExpectedRelations()
+        {
+            // Act
+            var relations = _relationService.GetUserRelations(_john.Id).ToList();
+
+            // Assert
+            bool containsKate = relations.Any(x => x.InvitedUser.UserName == _kate.UserName);
+            bool containsDave = relations.Any(x => x.InvitingUser.UserName == _dave.UserName);
+            bool containsTwoRelations = relations.Count == 2;
+            Assert.IsTrue(containsTwoRelations && containsKate && containsDave);
+        }
     }
 }
