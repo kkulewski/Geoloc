@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using Geoloc.Services;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +55,24 @@ namespace Geoloc.Tests.Services
 
             // Assert
             Assert.Greater(twoClaimsToken.Length, singleClaimToken.Length);
+        }
+
+        [Test]
+        public void AddClaims_AddsEachClaimsToToken()
+        {
+            // Arrange
+            var claims = new List<Claim>
+            {
+                new Claim("name", "John"),
+                new Claim("surname", "Doe"),
+                new Claim("anotherType", "anotherValue")
+            };
+
+            // Act
+            var token = _factory.AddClaims(claims).Build();
+
+            // Assert
+            Assert.AreEqual("Doe", token.Claims.Single(x => x.Type == "surname").Value);
         }
     }
 }
