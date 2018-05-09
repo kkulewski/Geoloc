@@ -13,21 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20180310150102_Initial.cs" />
-    <Compile Remove="Migrations\20180310150102_Initial.Designer.cs" />
-    <Compile Remove="Migrations\20180310150504_InitialMigration.cs" />
-    <Compile Remove="Migrations\20180310150504_InitialMigration.Designer.cs" />
-    <Compile Remove="Migrations\20180325162822_AddEventModel.cs" />
-    <Compile Remove="Migrations\20180325162822_AddEventModel.Designer.cs" />
-    <Compile Remove="Migrations\20180325164852_RenameEventToMeeting.cs" />
-    <Compile Remove="Migrations\20180325164852_RenameEventToMeeting.Designer.cs" />
-    <Compile Remove="Migrations\20180325175431_AddOwnerToMeeting.cs" />
-    <Compile Remove="Migrations\20180325175431_AddOwnerToMeeting.Designer.cs" />
-    <Compile Remove="Migrations\20180330064026_AddUsersToMeeting.cs" />
-    <Compile Remove="Migrations\20180330064026_AddUsersToMeeting.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
   </ItemGroup>

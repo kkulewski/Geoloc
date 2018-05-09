@@ -9,30 +9,30 @@ namespace Geoloc.Services
 {
     public class UserService : IUserService
     {
-        private readonly IAppUserRepository _appUserRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserService(IAppUserRepository appUserRepository)
+        public UserService(IUserRepository userRepository)
         {
-            _appUserRepository = appUserRepository;
+            _userRepository = userRepository;
         }
 
         public UserModel GetById(Guid id)
         {
-            var user = _appUserRepository.Get(id);
+            var user = _userRepository.Get(id);
             var result = Mapper.Map<UserModel>(user);
             return result;
         }
 
         public UserModel GetByUserName(string userName)
         {
-            var user = _appUserRepository.Get(userName);
+            var user = _userRepository.Get(userName);
             var result = Mapper.Map<UserModel>(user);
             return result;
         }
 
         public IEnumerable<UserModel> GetAllUsers()
         {
-            var users = _appUserRepository.GetAll();
+            var users = _userRepository.GetAll();
             var result = Mapper.Map<IEnumerable<UserModel>>(users);
             return result;
         }

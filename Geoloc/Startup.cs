@@ -35,10 +35,10 @@ namespace Geoloc
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAppUserRepository, AppUserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddScoped<IUserRelationService, UserRelationService>();
-            services.AddScoped<IUserRelationRepository, UserRelationRepository>();
+            services.AddScoped<IRelationService, RelationService>();
+            services.AddScoped<IRelationRepository, RelationRepository>();
             
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
@@ -46,7 +46,7 @@ namespace Geoloc
             services.AddScoped<JwtTokenFactory>();
             services.AddScoped<IAuthService, AuthService>();
 
-            var builder = services.AddIdentityCore<AppUser>(opt =>
+            var builder = services.AddIdentityCore<User>(opt =>
             {
                 opt.Password.RequiredLength = 3;
                 opt.Password.RequireLowercase = false;
@@ -56,7 +56,7 @@ namespace Geoloc
             });
             builder = new IdentityBuilder(builder.UserType, typeof(UserRole), builder.Services);
             builder.AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.AddSignInManager<SignInManager<AppUser>>();
+            builder.AddSignInManager<SignInManager<User>>();
 
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
