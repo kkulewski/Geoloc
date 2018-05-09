@@ -144,7 +144,7 @@ namespace Geoloc.Tests.Services
             var meeting = new Meeting
             {
                 Id = meetingId,
-                AppUsersInMeeting = new List<UserInMeeting>()
+                UserInMeetings = new List<UserInMeeting>()
             };
             _repoMock.Setup(x => x.Get(meetingId)).Returns(meeting);
 
@@ -152,8 +152,8 @@ namespace Geoloc.Tests.Services
             _meetingService.JoinMeetingAsUser(userId, meetingId);
 
             // Assert
-            var hasOneParticipant = meeting.AppUsersInMeeting.Count == 1;
-            var containsUser = meeting.AppUsersInMeeting.Any(x => x.UserId == userId);
+            var hasOneParticipant = meeting.UserInMeetings.Count == 1;
+            var containsUser = meeting.UserInMeetings.Any(x => x.UserId == userId);
             Assert.IsTrue(hasOneParticipant && containsUser);
         }
 

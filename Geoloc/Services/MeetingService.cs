@@ -40,7 +40,7 @@ namespace Geoloc.Services
             {
                 var meeting = Mapper.Map<Meeting>(model);
                 meeting.Id = Guid.NewGuid();
-                meeting.AppUsersInMeeting.Add(new UserInMeeting
+                meeting.UserInMeetings.Add(new UserInMeeting
                 {
                     UserId = meeting.MeetingHostId
                 });
@@ -67,7 +67,7 @@ namespace Geoloc.Services
             try
             {
                 var meeting = _meetingRepository.Get(meetingId);
-                meeting.AppUsersInMeeting.Add(new UserInMeeting
+                meeting.UserInMeetings.Add(new UserInMeeting
                 {
                     UserId = userId
                 });

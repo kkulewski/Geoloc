@@ -21,6 +21,48 @@ namespace Geoloc.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.Property<Guid>("MeetingHostId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("StartTime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("InvitedUserId");
+
+                    b.Property<Guid>("InvitingUserId");
+
+                    b.Property<int>("RelationStatus");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvitedUserId");
+
+                    b.HasIndex("InvitingUserId");
+
+                    b.ToTable("Relations");
+                });
+
             modelBuilder.Entity("Geoloc.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -84,51 +126,9 @@ namespace Geoloc.Migrations
 
                     b.HasKey("UserId", "MeetingId");
 
-                    b.HasIndex("MeetingId");
+                    b.HasAlternateKey("MeetingId", "UserId");
 
                     b.ToTable("UserInMeetings");
-                });
-
-            modelBuilder.Entity("Geoloc.Data.Entities.Meeting", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.Property<Guid>("MeetingHostId");
-
-                    b.Property<string>("Name");
-
-                    b.Property<DateTime>("StartTime");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Meetings");
-                });
-
-            modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("InvitedUserId");
-
-                    b.Property<Guid>("InvitingUserId");
-
-                    b.Property<int>("RelationStatus");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvitedUserId");
-
-                    b.HasIndex("InvitingUserId");
-
-                    b.ToTable("Relations");
                 });
 
             modelBuilder.Entity("Geoloc.Data.Entities.UserRole", b =>
@@ -236,19 +236,6 @@ namespace Geoloc.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Geoloc.Data.Entities.UserInMeeting", b =>
-                {
-                    b.HasOne("Geoloc.Data.Entities.User", "User")
-                        .WithMany("Meetings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Geoloc.Data.Entities.Meeting", "Meeting")
-                        .WithMany("AppUsersInMeeting")
-                        .HasForeignKey("MeetingId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("Geoloc.Data.Entities.Relation", b =>
                 {
                     b.HasOne("Geoloc.Data.Entities.User", "InvitedUser")
@@ -259,6 +246,19 @@ namespace Geoloc.Migrations
                     b.HasOne("Geoloc.Data.Entities.User", "InvitingUser")
                         .WithMany()
                         .HasForeignKey("InvitingUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Geoloc.Data.Entities.UserInMeeting", b =>
+                {
+                    b.HasOne("Geoloc.Data.Entities.Meeting", "Meeting")
+                        .WithMany("UserInMeetings")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Geoloc.Data.Entities.User", "User")
+                        .WithMany("Meetings")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

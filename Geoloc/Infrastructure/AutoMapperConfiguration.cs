@@ -41,11 +41,11 @@ namespace Geoloc.Infrastructure
 
             CreateMap<MeetingModel, Meeting>()
                 .ForMember(x => x.MeetingHostId, o => o.MapFrom(s => s.HostId))
-                .ForMember(x => x.AppUsersInMeeting, o => o.MapFrom(s => s.Participants));
+                .ForMember(x => x.UserInMeetings, o => o.MapFrom(s => s.Participants));
 
 
             CreateMap<Meeting, MeetingModel>()
-                .ForMember(x => x.Participants, o => o.MapFrom(s => s.AppUsersInMeeting))
+                .ForMember(x => x.Participants, o => o.MapFrom(s => s.UserInMeetings))
                 .ForMember(x => x.HostId, o => o.MapFrom(s => s.MeetingHostId));
 
             CreateMap<MeetingModel, MeetingWebModel>()

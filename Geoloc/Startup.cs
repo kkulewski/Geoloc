@@ -43,7 +43,7 @@ namespace Geoloc
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IMeetingRepository, MeetingRepository>();
 
-            services.AddSingleton<JwtTokenFactory>();
+            services.AddScoped<JwtTokenFactory>();
             services.AddScoped<IAuthService, AuthService>();
 
             var builder = services.AddIdentityCore<User>(opt =>
